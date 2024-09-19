@@ -1,24 +1,94 @@
 .home-container {
+  height: 100%;
   display: flex;
-
+  overflow: auto;
 }
-.home-left{
+.home-left {
   padding: 36px 31px;
   width: 1220px;
-  border-right: 1px solid #EDEDED;
-  .home-left-top{
+  border-right: 1px solid #ededed;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+    .search {
+      height: 40px;
+      width: 323px;
+      font-weight: 500;
+      font-size: 15px;
+      line-height: 24px;
+    }
+  }
+  .back {
+    width: 90px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 24px;
+    padding-bottom: 61px;
+  }
+  .detailComment {
+    padding-top: 24px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .home-left-top {
     display: flex;
     justify-content: space-between;
     font-size: 20px;
     font-weight: bolder;
     color: #202226;
   }
+  .postContent {
+    display: flex;
+    flex-direction: column;
+    padding: 0 20px;
+    .post {
+      display: flex;
+      width: 100%;
+      padding-left: 16px;
+      input {
+        flex: 1;
+      }
+      .button {
+        width: 106px;
+        height: 40px;
+        line-height: 40px;
+        background: #5b85f2;
+        border-radius: 4px;
+        color: white;
+        text-align: center;
+      }
+    }
+    .postList {
+      display: flex;
+      gap: 24px;
+      padding: 16px 0;
+      margin-top: 16px;
+      margin-bottom: 32px;
+      border-top: 1px solid #f3f3f3;
+      .listItem {
+        width: 24px;
+      }
+    }
+  }
 }
-.home-right{
+.home-right {
   padding: 36px;
-  .home-right-title{
+  .home-right-title {
     font-size: 20px;
     color: #202226;
     margin-bottom: 24px;
   }
+}
+.searchInput {
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 24px;
+  padding: 0;
 }
