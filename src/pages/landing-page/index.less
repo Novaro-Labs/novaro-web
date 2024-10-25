@@ -4,16 +4,6 @@
   background: #000;
 
   .header {
-    height: 1000px;
-    // margin-top: -90px;
-    background: url("@/assets/landing-page/HeaderKV.png") no-repeat;
-    background-size: contain;
-    background-position: right;
-    overflow: hidden;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-right: 240px;
     .header_left {
       height: 100%;
       background: linear-gradient(270deg, rgba(0, 0, 0, 0) 0%, #040404 92.93%);
@@ -122,12 +112,13 @@
     }
   }
   .part_1 {
+    z-index: 10;
     position: relative;
     background: #000;
     .part1Left {
       position: absolute;
       height: 280px;
-      margin-top: -80px;
+      margin-top: -40px;
     }
     .part1Right {
       position: absolute;
@@ -138,7 +129,6 @@
     .part1Back {
       width: 810px;
       margin-left: 286px;
-      margin-top: -45px;
       margin-bottom: 90px;
     }
     .part1Human {
@@ -150,7 +140,7 @@
     .part1Ufo {
       position: absolute;
       left: 290px;
-      top: -210px;
+      top: -150px;
       width: 322px;
     }
     .part1Form {
@@ -341,5 +331,33 @@
   }
   100% {
     transform: rotate(0deg); /* 回到初始位置 */
+  }
+}
+
+.animate-sky {
+  animation: infiniteSlide 24s linear infinite;
+}
+
+@keyframes infiniteSlide {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(180px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+.animate-star {
+  animation: spin 16s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
