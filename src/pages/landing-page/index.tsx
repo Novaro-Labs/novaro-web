@@ -1,4 +1,6 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { useNavigate } from 'react-router-dom';
+
 import "./index.less";
 import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect } from "react";
 import logo from "../../assets/landing-page/logo.png";
@@ -18,8 +20,10 @@ import Telegram from "../../assets/landing-page/Telegram.png";
 import Discord from "../../assets/landing-page/Discord.png";
 import Medium from "../../assets/landing-page/Medium.png";
 import Medium1 from "../../assets/landing-page/Medium1.png";
+import HeroSectionBg from "./HeroSectionBg";
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   const [codes, setCodes] = useState(new Array(6).fill(""));
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
@@ -73,115 +77,134 @@ const LandingPage = () => {
   ];
   return (
     <div className="landing_container">
-      <div className="header">
-        <div className="header_left">
-          <img src={logo} className="logo" />
-          <div className="login_form">
-            <div className="form_title">
-              Nova Your Social Identity with the Power of Web3
-            </div>
-            <div className="form">
-              <div className="code_title">Enter your invitation code:</div>
-              <div className="code">
-                {codes.map((value, index) => (
-                  <input
-                    key={index}
-                    ref={(el: HTMLInputElement) =>
-                      (inputsRef.current[index] = el)
-                    }
-                    type="text"
-                    className="code_input"
-                    value={value}
-                    onChange={(e) => handleChange(e, index)}
-                    onKeyDown={(e) => handleKeyDown(e, index)}
-                    maxLength={1}
-                  />
-                ))}
+      <div className="header h-[1006px] relative w-full overflow-hidden pb-20">
+        <div className="absolute top-0 left-0 h-full w-full">
+          <HeroSectionBg />
+        </div>
+        <div className="relative z-10 flex justify-between items-start overflow-hidden pr-[240px] h-[1006px]">
+          <div className="header_left">
+            <img src={logo} className="logo" />
+            <div className="login_form">
+              <div className="form_title">
+                Nova Your Social Identity with the Power of Web3
               </div>
-              <div className="discord">
-                Don't have one? Visit our{" "}
-                <div className="discord_text"> Discord</div>
+              <div className="form">
+                <div className="code_title">Enter your invitation code:</div>
+                <div className="code">
+                  {codes.map((value, index) => (
+                    <input
+                      key={index}
+                      ref={(el: HTMLInputElement) =>
+                        (inputsRef.current[index] = el)
+                      }
+                      type="text"
+                      className="code_input"
+                      value={value}
+                      onChange={(e) => handleChange(e, index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
+                      maxLength={1}
+                    />
+                  ))}
+                </div>
+                <div className="discord">
+                  Don't have one? Visit our{" "}
+                  <div className="discord_text"> Discord</div>
+                </div>
+                <div className="twitter">login with x</div>
               </div>
-              <div className="twitter">login with x</div>
             </div>
           </div>
-        </div>
-        {/* <div className="header_right">login</div> */}
-        <ConnectButton.Custom>
-          {({
-            account,
-            chain,
-            openAccountModal,
-            openChainModal,
-            openConnectModal,
-            authenticationStatus,
-            mounted,
-          }) => {
-            const ready = mounted && authenticationStatus !== "loading";
-            const connected =
-              ready &&
-              account &&
-              chain &&
-              (!authenticationStatus ||
-                authenticationStatus === "authenticated");
+          {/* <div className="header_right">login</div> */}
+          <ConnectButton.Custom>
+            {({
+              account,
+              chain,
+              openAccountModal,
+              openChainModal,
+              openConnectModal,
+              authenticationStatus,
+              mounted,
+            }) => {
+              // 监听 account 变化
+              useEffect(() => {
+                if (mounted && account?.address) {
+                  navigate('/home'); // 如果未连接，重定向到登录页
+                }
+              }, [account, mounted]);
+              
+              const ready = mounted && authenticationStatus !== "loading";
+              const connected =
+                ready &&
+                account &&
+                chain &&
+                (!authenticationStatus ||
+                  authenticationStatus === "authenticated");
 
-            return (() => {
-              if (!connected) {
+              return (() => {
+                if (!connected) {
+                  return (
+                    <button
+                      onClick={() => {
+                        openConnectModal();
+                        // navigate to home
+                      }}
+                      className="relative  mt-4 flex h-12 select-none items-center overflow-hidden whitespace-nowrap rounded-full bg-[#030305] px-7 text-white transition-all duration-200 font-bold group"
+                    >
+                      <div className="absolute inset-0 left-0 top-0 z-10 hidden rounded-lg bg-white/5 group-hover:block"></div>
+                      Connect Wallet
+                    </button>
+                  );
+                }
+                if (chain.unsupported) {
+                  return (
+                    <button onClick={openChainModal} type="button">
+                      Wrong network
+                    </button>
+                  );
+                }
+
                 return (
-                  <div onClick={openConnectModal} className="login">
-                    Login
+                  <div style={{ display: "flex", gap: 12 }}>
+                    <button
+                      onClick={openChainModal}
+                      style={{ display: "flex", alignItems: "center" }}
+                      type="button"
+                    >
+                      {chain.hasIcon && (
+                        <div
+                          style={{
+                            background: chain.iconBackground,
+                            width: 12,
+                            height: 12,
+                            borderRadius: 999,
+                            overflow: "hidden",
+                            marginRight: 4,
+                          }}
+                        >
+                          {chain.iconUrl && (
+                            <img
+                              alt={chain.name ?? "Chain icon"}
+                              src={chain.iconUrl}
+                              style={{ width: 12, height: 12 }}
+                            />
+                          )}
+                        </div>
+                      )}
+                      {chain.name}
+                    </button>
+
+                    <button onClick={openAccountModal} type="button">
+                      {account.displayName}
+                      {account.displayBalance
+                        ? ` (${account.displayBalance})`
+                        : ""}
+                    </button>
                   </div>
                 );
-              }
-              if (chain.unsupported) {
-                return (
-                  <button onClick={openChainModal} type="button">
-                    Wrong network
-                  </button>
-                );
-              }
-
-              return (
-                <div style={{ display: "flex", gap: 12 }}>
-                  <button
-                    onClick={openChainModal}
-                    style={{ display: "flex", alignItems: "center" }}
-                    type="button"
-                  >
-                    {chain.hasIcon && (
-                      <div
-                        style={{
-                          background: chain.iconBackground,
-                          width: 12,
-                          height: 12,
-                          borderRadius: 999,
-                          overflow: "hidden",
-                          marginRight: 4,
-                        }}
-                      >
-                        {chain.iconUrl && (
-                          <img
-                            alt={chain.name ?? "Chain icon"}
-                            src={chain.iconUrl}
-                            style={{ width: 12, height: 12 }}
-                          />
-                        )}
-                      </div>
-                    )}
-                    {chain.name}
-                  </button>
-
-                  <button onClick={openAccountModal} type="button">
-                    {account.displayName}
-                    {account.displayBalance
-                      ? ` (${account.displayBalance})`
-                      : ""}
-                  </button>
-                </div>
-              );
-            })();
-          }}
-        </ConnectButton.Custom>
+              })();
+            }}
+          </ConnectButton.Custom>
+        </div>
       </div>
       <div className="part_1">
         <img src={part1Left} className="part1Left" />
