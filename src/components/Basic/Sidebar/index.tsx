@@ -1,39 +1,86 @@
 import { NavLink } from "react-router-dom";
-import "./index.less"
-import logo from "../../../assets/svg/logo.svg"
+import "./index.less";
+import logo from "../../../assets/svg/logo.svg";
+import HomeIcon from "../../../assets/common/home-icon.svg";
+import HomeActiveIcon from "../../../assets/common/home-active-icon.svg";
+import SpaceIcon from "../../../assets/common/space-icon.svg";
+import SpaceActiveIcon from "../../../assets/common/space-active-icon.svg";
+import TokenIcon from "../../../assets/common/token-icon.svg";
+import TokenActiveIcon from "../../../assets/common/token-active-icon.svg";
+import ProfileIcon from "../../../assets/common/profile-icon.svg";
+import ProfileActiveIcon from "../../../assets/common/profile-active-icon.svg";
+
+const MENU_DICT: Record<
+  string,
+  { icon: string; activeIcon?: string; title: string }
+> = {
+  home: {
+    icon: HomeIcon,
+    activeIcon: HomeActiveIcon,
+    title: "Home",
+  },
+  space: {
+    icon: SpaceIcon,
+    activeIcon: SpaceActiveIcon,
+    title: "Space",
+  },
+  token: {
+    icon: TokenIcon,
+    activeIcon: TokenActiveIcon,
+    title: "Token",
+  },
+  profile: {
+    icon: ProfileIcon,
+    activeIcon: ProfileActiveIcon,
+    title: "Profile",
+  },
+} as const;
+
 interface NavLinkItemProps {
-    to: string;
-    label: string;
+  to: string;
+  label: string;
 }
 
 const NavLinkItem = ({ to, label }: NavLinkItemProps) => {
-    return (
-        <li>
-            <NavLink
-                to={to}
-                className={({ isActive }) => (isActive ? "active" : "")}
-            >
-                {label}
-            </NavLink>
-        </li>
-    );
+  return (
+    <li>
+      <NavLink to={to} className={({ isActive }) => (isActive ? "active" : "")}>
+        {({ isActive }) => (
+          <div className="flex items-center gap-2">
+            <img
+              src={
+                !isActive
+                  ? MENU_DICT[label.toLowerCase() as keyof typeof MENU_DICT]
+                      .icon
+                  : MENU_DICT[label.toLowerCase() as keyof typeof MENU_DICT]
+                      .activeIcon
+              }
+              alt={label}
+              className="size-8 nav-item-icon"
+            />
+            {label}
+          </div>
+        )}
+      </NavLink>
+    </li>
+  );
 };
 const Sidebar = () => {
-    return (
-        <div className="sidebar">
-            <NavLink to="/home" className="logo">
-                <img src={logo} width={42} height={42} alt="Logo" />
-            </NavLink>
-            <nav>
-                <ul>
-                    <NavLinkItem to="/home" label="Home" />
-                    <NavLinkItem to="/space" label="Space" />
-                    <NavLinkItem to="/token" label="Token" />
-                    <NavLinkItem to="/profile" label="Profile" />
-                </ul>
-            </nav>
-        </div>
-    )
-}
+  return (
+    <div className="sidebar">
+      <NavLink to="/home" className="logo">
+        <img src={logo} width={42} height={42} alt="Logo" />
+      </NavLink>
+      <nav>
+        <ul>
+          <NavLinkItem to="/home" label="Home" />
+          <NavLinkItem to="/space" label="Space" />
+          <NavLinkItem to="/token" label="Token" />
+          <NavLinkItem to="/profile" label="Profile" />
+        </ul>
+      </nav>
+    </div>
+  );
+};
 
 export default Sidebar;
