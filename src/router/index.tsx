@@ -5,6 +5,7 @@ import LandingPage from "../pages/landing-page";
 import ProfilePage from "../pages/profile-page";
 import SpacePage from "../pages/space-page";
 import TokenPage from "../pages/token-page";
+import TokenDetailPage from "../pages/token-detail-page";
 
 import { ReactNode } from "react";
 import { useAccount } from "wagmi";
@@ -43,6 +44,10 @@ const routes = [
         path: "token",
         element: <PrivateRoute element={<TokenPage />} />,
       },
+      {
+        path: "token-detail",
+        element: <PrivateRoute element={<TokenDetailPage />} />
+      }
     ],
   },
 ];
