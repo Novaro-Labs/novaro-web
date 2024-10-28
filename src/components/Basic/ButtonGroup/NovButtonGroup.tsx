@@ -4,15 +4,15 @@ import { Button } from "@web3uikit/core";
 import "./index.less"
 
 type NovButtonItems = {
-  label: string;
+  label?: string | undefined;
 }
 
 type NovButtonGroupProps = {
-  children: NovButtonItems
+  children: NovButtonItems | string[]
   className?: string;
 }
 
-export const NovButtonGroup = (props : NovButtonGroupProps) => {
+const NovButtonGroup = (props : NovButtonGroupProps) => {
   const [flag, setFlag] = useState<number>(0)
   const [activeBtn, setActiveBtn] = useState<number>(0)
 
@@ -21,7 +21,7 @@ export const NovButtonGroup = (props : NovButtonGroupProps) => {
   }
   return (
     <div className={["btn-group", props.className].join(' ')}>
-      {props.children.map((item: NovButtonItems, index: number) => (
+      {(props?.children ?? []).map((item: any, index: number) => (
         <Button
           className={["btn-item",
             index === activeBtn ? "btn-item-active" : "btn-item-normal"
@@ -33,3 +33,5 @@ export const NovButtonGroup = (props : NovButtonGroupProps) => {
     </div>
   )
 }
+
+export default NovButtonGroup

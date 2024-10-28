@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import ReactEChartsCore from 'echarts-for-react/lib/core';
 import * as echarts from 'echarts/core';
 import { LineChart } from "echarts/charts";
@@ -16,32 +17,73 @@ echarts.use([
   TooltipComponent,
   CanvasRenderer,
 ]);
+import "./index.less"
 
 const TokenEcharts = () => {
+  const [dateTime, setDateTime] = useState<string>('');
+  useEffect(() => {
+    const updateDateTime = () => {
+      const now = new Date();
+      // 定义时间格式选项
+      const options: Intl.DateTimeFormatOptions = {
+        day: '2-digit', // 日期为两位数
+        month: 'short', // 月份为缩写形式
+        hour: '2-digit', // 小时为两位数
+        minute: '2-digit', // 分钟为两位数
+        timeZoneName: 'short', // 显示简短时区名
+        hour12: false // 使用24小时制
+      };
+      // 使用英文环境来格式化日期，以符合要求的格式
+      const formattedDateTime = new Intl.DateTimeFormat('en-GB', options).format(now);
+      // 分割字符串以重新排列
+      const parts = formattedDateTime.split(', ');
+      const datePart = parts[0];
+      const timePart = parts[1].split(' ')[0];
+      const timeZone = parts[1].split(' ')[1];
+      const customFormattedDateTime = `${datePart} ${timePart} ${timeZone.toUpperCase()}`;
+      setDateTime(customFormattedDateTime);
+    };
+
+    updateDateTime();
+    const timer = setInterval(updateDateTime, 1000); // 每秒更新时间
+
+    return () => clearInterval(timer); // 清除定时器
+  }, []);
   const option = {
     tooltip: {
       trigger: "axis", // 鼠标悬停显示数据
     },
     grid: {
       top: 30, // 图表距离容器顶部的距离
-      left: 36, // 图表距离容器左侧的距离
-      right: 33, // 图表距离容器右侧的距离
+      left: 5, // 图表距离容器左侧的距离
+      right: 5, // 图表距离容器右侧的距离
       bottom: 20, // 图表距离容器底部的距离
       containLabel: true, // 是否包含刻度标签
     },
     xAxis: {
       type: "category",
       data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      axisTick: { show: false },
+      axisLine: { show: false },
+      axisLabel: {
+       color: "#93989A"
+      },
     },
     yAxis: {
       type: "value",
       min: 0, // 最小值 0
-      max: 100, // 最大值 100
-      interval: 50, // 刻度间隔
+      max: 1, // 最大值 100
+      interval: 0.2, // 刻度间隔
+      splitLine: {
+        show: true,
+        lineStyle: {
+          type: 'dashed'
+        }
+      }
     },
     series: [
       {
-        data: [30, 40, 90, 10, 30, 80, 50],
+        data: [0.3, 0.4, 0.9, 0.6, 0.3, 0.8, 0.5],
         type: "line",
         smooth: false, // 设置为曲线
         lineStyle: {
@@ -60,51 +102,13 @@ const TokenEcharts = () => {
       },
     ],
   };
-  const records = [{
-    id: 1,
-    activity: "Collected daily ME",
-    point: 550,
-    data: "2024-08-18",
-  },
-    {
-      id: 2,
-      activity: "No check-ins for 7 consecutive days",
-      point: -550,
-      data: "2024-08-18",
-    },
-    {
-      id: 3,
-      activity: "Collected daily ME",
-      point: -350,
-      data: "2024-08-18",
-    },
-    {
-      id: 4,
-      activity: "Energy collected by",
-      point: 450,
-      data: "2024-08-18",
-    },
-    {
-      id: 5,
-      activity: "Collected daily ME",
-      point: 120,
-      data: "2024-08-18",
-    },
-    {
-      id: 6,
-      activity: "Energy collected by 0x1c...0e83",
-      point: 3000,
-      data: "2024-08-18",
-    },
-  ];
-  const userInfo = [
-    { text: 'post', count: '332' },
-    { text: 'follower', count: '1,200' },
-    { text: 'following', count: '240' }
-  ]
   return (
-    <div className="container">
-      <ReactEChartsCore echarts={echarts} option={option} />
+    <div className="statistics">
+      <div className="title my-4">
+        <div className="dollar">$0.70</div>
+        <div>{ dateTime }</div>
+      </div>
+      <ReactEChartsCore style={{ height: '360px'}} echarts={echarts} option={option} />
     </div>
   )
 };

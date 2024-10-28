@@ -2,9 +2,11 @@ import "./index.less";
 // import { useEffect, useState } from "react";
 import light from "../../assets/svg/light.svg";
 import { TabPane, Tabs } from "../../components/Basic/Tabs";
-import { NovButtonGroup } from "../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
+import NovButtonGroup from "../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
 import TokenEcharts from "./components/token-echats";
-import PostList from "../../components/PostList";
+import TokenTrade from "./components/token-trade";
+import TokenRateTable from "./components/token-rateTable";
+import TokenCommunity from "./components/token-community";
 import { mockOwnPosts, mockPosts, mockWithCommentsPosts } from "../../mock-data/posts.ts";
 import { useEffect, useState } from "react";
 
@@ -28,7 +30,7 @@ const TokenDetailPage = () => {
         Leo
       </div>
       <div className="flex py-6 min-h-screen">
-        <div className="w-4/6 pr-6">
+        <div className="w-4/6 pr-6 ml-6">
           <div className="bg-white rounded-lg">
             {/* filter */}
             <div className="flex items-center justify-between">
@@ -43,27 +45,18 @@ const TokenDetailPage = () => {
             </div>
             {/* echarts */}
             <TokenEcharts />
+            {/* rate */}
+            <div className="my-8">
+              <TokenRateTable />
+            </div>
           </div>
         </div>
         <div className="w-2/6">
-          <div className="bg-white rounded-lg p-4">
-            <Tabs>
-              <TabPane label="Posts">
-                <div className="flex flex-col items-center justify-center">
-                  <PostList posts={mockOwnPosts} />
-                </div>
-              </TabPane>
-              <TabPane label="Replies">
-                <PostList posts={mockWithCommentsPosts} />
-              </TabPane>
-              <TabPane label="Likes">
-                <PostList
-                  posts={[...mockOwnPosts, ...mockPosts].filter(
-                    (post) => post.favored
-                  )}
-                />
-              </TabPane>
-            </Tabs>
+          <div className="bg-white rounded-lg">
+            <TokenTrade />
+          </div>
+          <div className="my-8">
+            <TokenCommunity />
           </div>
         </div>
       </div>
