@@ -10,6 +10,7 @@ type NovButtonItems = {
 type NovButtonGroupProps = {
   children: NovButtonItems | string[]
   className?: string;
+  onActiveChange?: (activeLabel: string) => void;
 }
 
 const NovButtonGroup = (props : NovButtonGroupProps) => {
@@ -18,15 +19,21 @@ const NovButtonGroup = (props : NovButtonGroupProps) => {
 
   const changeBtn = (index: number) => {
     setActiveBtn(index)
+    // 传递选中标签
+    const activeLabel = typeof props.children[index] === 'string' ? props.children[index] : props.children[index]?.label;
+    if (props.onActiveChange && activeLabel) {
+      props.onActiveChange(activeLabel);
+    }
   }
   return (
     <div className={["btn-group", props.className].join(' ')}>
       {(props?.children ?? []).map((item: any, index: number) => (
         <Button
+          key={index} // 添加key属性
           className={["btn-item",
             index === activeBtn ? "btn-item-active" : "btn-item-normal"
           ].join(' ')}
-          text={item?.label || item }
+          text={typeof item === 'string' ? item : item?.label}
           onClick={() => changeBtn(index)}
         />
       ))}
