@@ -27,7 +27,7 @@ const TokenDetailPage = () => {
     <div className="py-5 px-6">
       <div className="flex items-center">
         <img src={light} width={24} height={24} className="mr-2" />
-        Leo
+        <span className="title">Token</span>
       </div>
       <div className="flex py-6 min-h-screen">
         <div className="w-4/6 pr-6 ml-6">

@@ -125,7 +125,12 @@ const TokenRateTable = () => {
           columns={Columns}
           dataSource={data}
           loading={loading}
-          pagination={{ position: ["bottomCenter"] }}
+          pagination={{
+            position: ["bottomCenter"],
+            total: data.length,
+            pageSize: 5,
+            className: "custom-pagination"
+        }}
         />
       </div>
 
