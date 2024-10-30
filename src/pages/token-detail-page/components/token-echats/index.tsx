@@ -29,8 +29,7 @@ const TokenEcharts = () => {
     debounce((value: string) => {
       setPresentPrice(value);
     }, 200), // 200ms 的防抖延迟
-    []
-  )
+    [presentPrice])
 
   const option = {
     tooltip: {
@@ -115,8 +114,9 @@ const TokenEcharts = () => {
   }, [])
 
   useEffect(() => {
+    let value = option.series[0].data[0].toFixed(2).toString()
+    setPresentPrice(value)
     // 监听tooltip的showTip事件
-
     let chartRef = echartRef.current.getEchartsInstance()
     chartRef && chartRef.on('showTip', function (event) {
       // event.data是当前数据点的值，这里假设你的数据是数字类型
@@ -124,7 +124,6 @@ const TokenEcharts = () => {
       // 更新presentPrice状态,增加防抖
       debouncedSetPresentPrice(currentValue.toString())
     });
-
     // 清理事件监听
     return () => {
       chartRef && chartRef.off('showTip')
