@@ -1,28 +1,17 @@
+import { useState } from "react";
 import "./index.less";
-// import { useEffect, useState } from "react";
 import light from "../../assets/svg/light.svg";
-import { TabPane, Tabs } from "../../components/Basic/Tabs";
 import NovButtonGroup from "../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
 import TokenEcharts from "./components/token-echats";
 import TokenTrade from "./components/token-trade";
 import TokenRateTable from "./components/token-rateTable";
 import TokenCommunity from "./components/token-community";
-import { mockOwnPosts, mockPosts, mockWithCommentsPosts } from "../../mock-data/posts.ts";
-import { useEffect, useState } from "react";
+import { TokenDollarEnum, TokenTimeEnum } from "../../mock-data/token.ts";
 
 const TokenDetailPage = () => {
-  const [dollarButtons, setDollarButtons] = useState<any>([])
-  const [timeButtons, setTimeButtons] = useState<any>([])
-  useEffect(() => {
-    const dollarBtns = [{
-      label: "USD"
-    }, {
-      label: "ETH"
-    }]
-    const timeButtons = ['1h', '4h', '12h', '1d']
-    setDollarButtons(dollarBtns);
-    setTimeButtons(timeButtons);
-  }, [])
+  const [dollarButtons, setDollarButtons] = useState<any>(TokenDollarEnum)
+  const [timeButtons, setTimeButtons] = useState<any>(TokenTimeEnum)
+
   return (
     <div className="py-5 px-6">
       <div className="flex items-center">
@@ -61,7 +50,6 @@ const TokenDetailPage = () => {
         </div>
       </div>
     </div>
-
   );
 };
 

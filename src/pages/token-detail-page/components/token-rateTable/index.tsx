@@ -1,13 +1,10 @@
 import { useState } from "react";
 import NovButtonGroup from "../../../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
-// import { Table } from "@web3uikit/core";
-import "./index.less"
-import { Table } from "antd"
+import NovaroTable from "../../../../components/Basic/NovaroTable";
+import { TokenTableEnum, TokenTableMockData } from "../../../../mock-data/token.ts";
 
 const TokenRateTable = () => {
-  // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false)
-
   const Columns = [
     {
       title: 'User',
@@ -45,95 +42,18 @@ const TokenRateTable = () => {
       key: 'date',
     },
   ]
-
-  const data = [
-    {
-      user: '0x1d8...426e',
-      type: 'Sell',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Buy',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Sell',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Buy',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Sell',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Buy',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Sell',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    },
-    {
-      user: '0x1d8...426e',
-      type: 'Buy',
-      amount: '1 minute',
-      cost: '$0.70',
-      eth: '0.001',
-      date: '9 hours ago'
-    }
-  ]
-
-  const tab = ['Activity', 'Top Holder']
-
   return (
     <div>
-      <NovButtonGroup children={tab}/>
+      <NovButtonGroup children={TokenTableEnum}/>
       {/* table */}
       <div className="mt-4">
-        <Table
-          rowClassName="even-row"
+        <NovaroTable
           columns={Columns}
-          dataSource={data}
+          dataSource={TokenTableMockData}
           loading={loading}
-          pagination={{
-            position: ["bottomCenter"],
-            total: data.length,
-            pageSize: 5,
-            className: "custom-pagination"
-        }}
+          pageSize="5"
         />
       </div>
-
     </div>
   )
 }

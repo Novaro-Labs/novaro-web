@@ -5,11 +5,12 @@ import NovButtonGroup from "../../../../components/Basic/ButtonGroup/NovButtonGr
 import InputNumber from "../../../../components/Basic/inputNumber/InputNumber.tsx";
 import "./index.less"
 import { CLIENT_CONTRACT_ADDRESS_LOCAL } from "../../../../constants.ts";
+import { TokenTradeEnum } from "../../../../mock-data/token.ts";
 import clientContract from "../../../../abi/client/NovaroClient.json";
 import { ethers } from 'ethers';
 
 const TokenTrade = () => {
-  const children = ['Buy', 'Sell'];
+  const tradeEnums = TokenTradeEnum
   const [title, setTitle] = useState('Buy');
   const [amount, setAmount] = useState(0);
 
@@ -39,7 +40,7 @@ const TokenTrade = () => {
 
   return (
     <div className="w-full token-trade">
-      <NovButtonGroup children={children} onActiveChange={handleActiveChange} />
+      <NovButtonGroup children={tradeEnums} onActiveChange={handleActiveChange} />
       <div className="w-full my-4 p-4 border border-border-color rounded-md">
         <div className="head">
           <div className="title">{ title }</div>
