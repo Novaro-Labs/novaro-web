@@ -45,7 +45,7 @@ const TokenPage = () => {
 
   const init = async () => {
     try {
-      const boundTokenAccount = (await readContract(config, {
+      const boundTokenAccount = (await readContract(config as any, {
         address: ACCOUNT_REGISTRY_CONTRACT_ADDRESS_LOCAL,
         chainId: 1337,
         abi: accountRegistryContract.abi,
@@ -95,7 +95,7 @@ const TokenPage = () => {
   };
 
   const getTokens = async () => {
-    const token = (await readContract(config, {
+    const token = (await readContract(config as any, {
       address: CLIENT_CONTRACT_ADDRESS_LOCAL,
       abi: clientContract.abi,
       functionName: "getFollowerPassTokenData",
