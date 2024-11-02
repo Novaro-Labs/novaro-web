@@ -3,28 +3,51 @@ import { useNavigate } from 'react-router-dom';
 
 import "./index.less";
 import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect } from "react";
-import logo from "../../assets/landing-page/logo.png";
-import part1Left from "../../assets/landing-page/part1Left.png";
-import part1Right from "../../assets/landing-page/part1Right.png";
-import part1Human from "../../assets/landing-page/part1human.png";
-import part1Back from "../../assets/landing-page/part1Back.png";
-import part1Ufo from "../../assets/landing-page/part1Ufo.png";
-import part2Left from "../../assets/landing-page/part2Left.png";
-import part2Right from "../../assets/landing-page/part2Right.png";
-import part2Logo from "../../assets/landing-page/part2Logo.png";
-import bottomKV from "../../assets/landing-page/bottomKV.png";
-import rocket from "../../assets/landing-page/rocket.png";
-import planet from "../../assets/landing-page/planet.png";
-import X from "../../assets/landing-page/X.png";
-import Telegram from "../../assets/landing-page/Telegram.png";
-import Discord from "../../assets/landing-page/Discord.png";
-import Medium from "../../assets/landing-page/Medium.png";
-import Medium1 from "../../assets/landing-page/Medium1.png";
+import logo from "@/assets/landing-page/logo.png";
+import part1Left from "@/assets/landing-page/part1Left.png";
+import part1Right from "@/assets/landing-page/part1Right.png";
+import part1Human from "@/assets/landing-page/part1human.png";
+import part1Back from "@/assets/landing-page/part1Back.png";
+import part1Ufo from "@/assets/landing-page/part1Ufo.png";
+import part2Left from "@/assets/landing-page/part2Left.png";
+import part2Right from "@/assets/landing-page/part2Right.png";
+import part2Logo from "@/assets/landing-page/part2Logo.png";
+import bottomKV from "@/assets/landing-page/bottomKV.png";
+import rocket from "@/assets/landing-page/rocket.png";
+import planet from "@/assets/landing-page/planet.png";
+import X from "@/assets/landing-page/X.png";
+import Telegram from "@/assets/landing-page/Telegram.png";
+import Discord from "@/assets/landing-page/Discord.png";
+import Medium from "@/assets/landing-page/Medium.png";
+import Medium1 from "@/assets/landing-page/Medium1.png";
 import HeroSectionBg from "./HeroSectionBg";
+import { request } from '@/utils/request';
+import { authX } from "@/api/auth-apis";
+import { message } from "antd";
+
+const SOCIAL_LIST = [
+  {
+    img: X,
+  },
+  {
+    img: Telegram,
+  },
+  {
+    img: Discord,
+  },
+  {
+    img: Medium,
+  },
+  {
+    img: Medium1,
+  },
+];
+
+const CODES_LENGTH = 8
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [codes, setCodes] = useState(new Array(6).fill(""));
+  const [codes, setCodes] = useState(new Array(CODES_LENGTH).fill(""));
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
@@ -33,7 +56,7 @@ const LandingPage = () => {
       newValues[index] = value;
       setCodes(newValues);
       // 自动跳转到下一个输入框
-      if (value !== "" && index < 5) {
+      if (value !== "" && index < 7) {
         inputsRef.current[index + 1].focus();
       }
     }
@@ -58,23 +81,16 @@ const LandingPage = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const socialList = [
-    {
-      img: X,
-    },
-    {
-      img: Telegram,
-    },
-    {
-      img: Discord,
-    },
-    {
-      img: Medium,
-    },
-    {
-      img: Medium1,
-    },
-  ];
+  const loginWithX = ()=>{
+    if(codes.join('').length < CODES_LENGTH){
+      message.warning('Please input invitation code')
+      return
+    }
+    authX({invitationCode: codes.join('')})
+  }
+    
+
+
   return (
     <div className="landing_container">
       <div className="header h-[1006px] relative w-full overflow-hidden pb-20">
@@ -110,7 +126,7 @@ const LandingPage = () => {
                   Don't have one? Visit our{" "}
                   <div className="discord_text"> Discord</div>
                 </div>
-                <div className="twitter">login with x</div>
+                <div className="twitter cursor-pointer font-bolder" onClick={loginWithX}>Login with X</div>
               </div>
             </div>
           </div>
@@ -125,13 +141,6 @@ const LandingPage = () => {
               authenticationStatus,
               mounted,
             }) => {
-              // 监听 account 变化
-              useEffect(() => {
-                if (mounted && account?.address) {
-                  navigate('/home'); // 如果未连接，重定向到登录页
-                }
-              }, [account, mounted]);
-              
               const ready = mounted && authenticationStatus !== "loading";
               const connected =
                 ready &&
@@ -262,7 +271,7 @@ const LandingPage = () => {
         <div className="bottom_social">
           <img src={logo} className="logo" />
           <div className="social_list">
-            {socialList.map((item, index) => {
+            {SOCIAL_LIST.map((item, index) => {
               return <img src={item.img} key={index} className="social_item" />;
             })}
           </div>

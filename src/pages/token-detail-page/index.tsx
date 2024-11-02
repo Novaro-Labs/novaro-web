@@ -2,12 +2,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom"
 import "./index.less";
 import light from "../../assets/svg/light.svg";
-import NovButtonGroup from "../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
+import NovButtonGroup from "../../components/Basic/ButtonGroup/NovButtonGroup";
 import TokenEcharts from "./components/token-echats";
 import TokenTrade from "./components/token-trade";
 import TokenRateTable from "./components/token-rateTable";
 import TokenCommunity from "./components/token-community";
-import { TokenDollarEnum, TokenTimeEnum } from "../../mock-data/token.ts";
+import { TokenDollarEnum, TokenTimeEnum } from "../../mock-data/token";
 
 const TokenDetailPage = () => {
   const history = useNavigate();

@@ -1,16 +1,15 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
     },
+    "jsx": "react-jsx",
     // 其他编译器选项
     "noUnusedLocals": false,
     "noUnusedParameters": false,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+
   }
 }

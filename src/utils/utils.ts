@@ -50,7 +50,7 @@ export function cn(...inputs: ClassValue[]) {
 
 // 防抖
 export const debounce = (func: Function, delay: number) => {
-  let timeoutId: number;
+  let timeoutId: NodeJS.Timeout;
   return (...args: any[]) => {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => func(...args), delay);

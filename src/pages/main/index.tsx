@@ -1,5 +1,5 @@
 import { Outlet} from "react-router-dom";
-import Sidebar from "../../components/Basic/Sidebar";
+import Sidebar from "@/components/Basic/Sidebar";
 import "./index.less"
 
 const Main = () => {
