@@ -1,7 +1,20 @@
-import { Table } from "antd"
-import "./index.less"
+import { Table } from "antd";
+import { ColumnsType } from "antd/lib/table";
+import "./index.less";
 
-const NovaroTable = ({ columns, dataSource, loading, pageSize }) => {
+interface NovaroTableProps {
+  columns: ColumnsType<any>;
+  dataSource: any[];
+  loading: boolean;
+  pageSize: number;
+}
+
+const NovaroTable: React.FC<NovaroTableProps> = ({
+  columns,
+  dataSource,
+  loading,
+  pageSize,
+}) => {
   return (
     <Table
       rowKey={(record) => record.id}
@@ -13,10 +26,10 @@ const NovaroTable = ({ columns, dataSource, loading, pageSize }) => {
         position: ["bottomCenter"],
         total: dataSource.length,
         pageSize: pageSize,
-        className: "custom-pagination"
+        className: "custom-pagination",
       }}
     />
-  )
-}
+  );
+};
 
 export default NovaroTable;
