@@ -1,4 +1,3 @@
-import React from "react";
 import headerKV from "@/assets/landing-page/HeaderKV.png";
 import heroSectionStar from "@/assets/landing-page/hero-section-star.png";
 

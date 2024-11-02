@@ -3,24 +3,27 @@ import { useNavigate } from 'react-router-dom';
 
 import "./index.less";
 import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect } from "react";
-import logo from "../../assets/landing-page/logo.png";
-import part1Left from "../../assets/landing-page/part1Left.png";
-import part1Right from "../../assets/landing-page/part1Right.png";
-import part1Human from "../../assets/landing-page/part1human.png";
-import part1Back from "../../assets/landing-page/part1Back.png";
-import part1Ufo from "../../assets/landing-page/part1Ufo.png";
-import part2Left from "../../assets/landing-page/part2Left.png";
-import part2Right from "../../assets/landing-page/part2Right.png";
-import part2Logo from "../../assets/landing-page/part2Logo.png";
-import bottomKV from "../../assets/landing-page/bottomKV.png";
-import rocket from "../../assets/landing-page/rocket.png";
-import planet from "../../assets/landing-page/planet.png";
-import X from "../../assets/landing-page/X.png";
-import Telegram from "../../assets/landing-page/Telegram.png";
-import Discord from "../../assets/landing-page/Discord.png";
-import Medium from "../../assets/landing-page/Medium.png";
-import Medium1 from "../../assets/landing-page/Medium1.png";
+import logo from "@/assets/landing-page/logo.png";
+import part1Left from "@/assets/landing-page/part1Left.png";
+import part1Right from "@/assets/landing-page/part1Right.png";
+import part1Human from "@/assets/landing-page/part1human.png";
+import part1Back from "@/assets/landing-page/part1Back.png";
+import part1Ufo from "@/assets/landing-page/part1Ufo.png";
+import part2Left from "@/assets/landing-page/part2Left.png";
+import part2Right from "@/assets/landing-page/part2Right.png";
+import part2Logo from "@/assets/landing-page/part2Logo.png";
+import bottomKV from "@/assets/landing-page/bottomKV.png";
+import rocket from "@/assets/landing-page/rocket.png";
+import planet from "@/assets/landing-page/planet.png";
+import X from "@/assets/landing-page/X.png";
+import Telegram from "@/assets/landing-page/Telegram.png";
+import Discord from "@/assets/landing-page/Discord.png";
+import Medium from "@/assets/landing-page/Medium.png";
+import Medium1 from "@/assets/landing-page/Medium1.png";
 import HeroSectionBg from "./HeroSectionBg";
+import { request } from '@/utils/request';
+import { authX } from "@/api/auth-apis";
+import { message } from "antd";
 
 const SOCIAL_LIST = [
   {
@@ -40,10 +43,11 @@ const SOCIAL_LIST = [
   },
 ];
 
+const CODES_LENGTH = 8
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const [codes, setCodes] = useState(new Array(6).fill(""));
+  const [codes, setCodes] = useState(new Array(CODES_LENGTH).fill(""));
   const inputsRef = useRef<HTMLInputElement[]>([]);
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
@@ -52,7 +56,7 @@ const LandingPage = () => {
       newValues[index] = value;
       setCodes(newValues);
       // 自动跳转到下一个输入框
-      if (value !== "" && index < 5) {
+      if (value !== "" && index < 7) {
         inputsRef.current[index + 1].focus();
       }
     }
@@ -78,8 +82,13 @@ const LandingPage = () => {
   }, []);
 
   const loginWithX = ()=>{
-    navigate('/home')
-  } 
+    if(codes.join('').length < CODES_LENGTH){
+      message.warning('Please input invitation code')
+      return
+    }
+    authX({invitationCode: codes.join('')})
+  }
+    
 
 
   return (
