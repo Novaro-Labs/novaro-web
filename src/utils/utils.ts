@@ -47,3 +47,12 @@ export function humanizeNumber(number: number, decPlaces: number = 1) {
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+// 防抖
+export const debounce = (func: Function, delay: number) => {
+  let timeoutId: number;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => func(...args), delay);
+  };
+};
