@@ -28,7 +28,8 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { config } from "../../wagmi";
 import mockNfts from "../../mock-data/nfts";
 import NiceModal from "@ebay/nice-modal-react";
-import ModalCreateNFT from "./ModalCreateNFT";
+// import ModalCreateNFT from "./ModalCreateNFT";
+import CreateTokenModal from "@/components/createTokenModal";
 
 const TokenPage = () => {
   const { address, isConnected } = useAccount();
@@ -42,6 +43,8 @@ const TokenPage = () => {
     "0xEEd3A32BA722A2E76e603B730874c5112092278b"
   );
   const [searchValue, setSearchValue] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
 
   const init = async () => {
     try {
@@ -73,7 +76,8 @@ const TokenPage = () => {
   });
 
   const createToken = async () => {
-    setCreateTokenLoading(true);
+    setVisible(true)
+    // setCreateTokenLoading(true);
     // await writeContractAsync({
     //   address: CLIENT_CONTRACT_ADDRESS_LOCAL,
     //   chainId: 1337,
@@ -87,10 +91,11 @@ const TokenPage = () => {
     //     boundTokenAccount,
     //   ],
     // });
-    setTimeout(() => {
-      setCreateTokenLoading(false);
-      NiceModal.show(ModalCreateNFT);
-    }, 2000);
+    // await NiceModal.show(ModalCreateNFT);
+    // setTimeout(() => {
+    //   setCreateTokenLoading(false);
+    //   NiceModal.show(ModalCreateNFT);
+    // }, 2000);
     // getTokens();
   };
 
@@ -120,6 +125,10 @@ const TokenPage = () => {
     searchValue === ""
       ? followerPassTokens
       : followerPassTokens.filter((x) => x.name.includes(searchValue));
+
+  const handleVisible = (v: boolean | ((prevState: boolean) => boolean)) => {
+    setVisible(v)
+  }
 
   return (
     <div className="pl-8 py-8">
@@ -192,6 +201,11 @@ const TokenPage = () => {
           <TokenCard nft={nft} key={nft.id} />
         ))}
       </div>
+      <CreateTokenModal
+        visible={visible}
+        handleVisible={handleVisible}
+        confirmLoading={confirmLoading}
+      />
     </div>
   );
 };
