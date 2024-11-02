@@ -19,6 +19,7 @@
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "noEmitOnError": true,
   }
 }

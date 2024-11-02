@@ -26,7 +26,7 @@ export default function PostItem({ post }: { post: TPost }) {
               isRounded
               size={48}
               theme="image"
-              image={post.author.avatar}
+              image={post.author.avatar || ""}
             />
             <div className="space-y-1.5">
               <div className="text-gray-500 ml-2 font-bold">

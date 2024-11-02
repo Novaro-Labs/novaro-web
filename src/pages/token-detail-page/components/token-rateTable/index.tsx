@@ -32,7 +32,7 @@ const TokenRateTable = () => {
       title: 'Cost',
       dataIndex: 'cost',
       key: 'cost',
-      render: (_, {cost, eth}) => {
+      render: (_: any, {cost, eth}: {cost: number, eth: number}) => {
         return <span>{cost}<span style={{ color: '#bbb'}}> ({eth}ETH)</span></span>
       }
     },

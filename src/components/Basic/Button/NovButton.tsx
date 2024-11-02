@@ -9,7 +9,6 @@ const NovButton = ({
   backgroundColor,
   textColor,
   icon,
-  className,
   onClick = () => {},
 }: {
   text?: string;
@@ -24,7 +23,6 @@ const NovButton = ({
 
   return (
     <Button
-      className={className}
       style={{
         width: width || "87px",
         height: "40px",

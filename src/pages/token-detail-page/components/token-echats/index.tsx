@@ -24,7 +24,7 @@ import "./index.less"
 const TokenEcharts = () => {
   const [dateTime, setDateTime] = useState<string>('')
   const [presentPrice, setPresentPrice] = useState<string>('')
-  const echartRef = useRef(null)
+  const echartRef = useRef<ReactEChartsCore | null>(null)
   const option = TokenDetailEchartsOptions
 
   const debouncedSetPresentPrice = useCallback(
@@ -65,10 +65,11 @@ const TokenEcharts = () => {
     let value = option.series[0].data[0].toFixed(2).toString()
     setPresentPrice(value)
     // 监听tooltip的showTip事件
-    let chartRef = echartRef.current.getEchartsInstance()
-    chartRef && chartRef.on('showTip', function (event) {
+    let chartRef = echartRef.current ? echartRef.current.getEchartsInstance() : null;
+    chartRef && chartRef.on('showTip', function (event: any) {
+      const dataIndex = (event as { dataIndex: number }).dataIndex;
       // event.data是当前数据点的值，这里假设你的数据是数字类型
-      const currentValue = (option.series[0].data[event.dataIndex] || option.series[0].data[0]).toFixed(2)
+      const currentValue = (option.series[0].data[dataIndex] || option.series[0].data[0]).toFixed(2)
       // 更新presentPrice状态,增加防抖
       debouncedSetPresentPrice(currentValue.toString())
     });

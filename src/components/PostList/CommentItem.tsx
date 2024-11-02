@@ -13,7 +13,7 @@ export default function CommentItem({ comment }: { comment: TComment }) {
             isRounded
             size={48}
             theme="image"
-            image={comment.author.avatar}
+            image={comment.author.avatar ?? ""}
           />
           <div>
             <div className="text-gray-500 text-sm ml-2">
