@@ -85,7 +85,7 @@ const TokenEcharts = () => {
       </div>
       <ReactEChartsCore
         ref={echartRef}
-        style={{ height: '360px'}}
+        style={{ height: '40vh'}}
         echarts={echarts} option={option} />
     </div>
   )
