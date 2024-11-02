@@ -51,7 +51,7 @@ const TokenRateTable = () => {
           columns={Columns}
           dataSource={TokenTableMockData}
           loading={loading}
-          pageSize="5"
+          pageSize={5}
         />
       </div>
     </div>

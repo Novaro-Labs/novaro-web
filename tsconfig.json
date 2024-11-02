@@ -21,5 +21,6 @@
     "module": "esnext",
     "moduleResolution": "node",
     "noEmitOnError": true,
+    "noImplicitAny": false,  // 将此选项设置为false
   }
 }
