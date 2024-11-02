@@ -1,5 +1,5 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 import "./index.less";
 import { ChangeEvent, KeyboardEvent, useRef, useState, useEffect } from "react";
@@ -21,7 +21,7 @@ import Discord from "@/assets/landing-page/Discord.png";
 import Medium from "@/assets/landing-page/Medium.png";
 import Medium1 from "@/assets/landing-page/Medium1.png";
 import HeroSectionBg from "./HeroSectionBg";
-import { request } from '@/utils/request';
+import { request } from "@/utils/request";
 import { authX } from "@/api/auth-apis";
 import { message } from "antd";
 
@@ -43,12 +43,15 @@ const SOCIAL_LIST = [
   },
 ];
 
-const CODES_LENGTH = 8
+const CODES_LENGTH = 8;
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const [animate, setAnimate] = useState(false);
   const [codes, setCodes] = useState(new Array(CODES_LENGTH).fill(""));
+
   const inputsRef = useRef<HTMLInputElement[]>([]);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
     if (/^\d$/.test(value) || value === "") {
@@ -68,7 +71,32 @@ const LandingPage = () => {
     }
   };
 
-  const [animate, setAnimate] = useState(false);
+  const loginWithX = () => {
+    if (codes.join("").length < CODES_LENGTH) {
+      message.warning("Please input invitation code");
+      return;
+    }
+    authX({ invitationCode: codes.join("") }).then((res) => {
+      navigate("/home");
+    });
+  };
+
+  const handleInvationCodePaste = (
+    e: React.ClipboardEvent<HTMLInputElement>
+  ) => {
+    e.preventDefault();
+    const clipboardData = e.clipboardData || (window as any).clipboardData;
+    const pastedData = clipboardData.getData("Text");
+    if (pastedData.length > CODES_LENGTH) {
+      return;
+    }
+    const newValues = [...codes];
+    const pastedValues = pastedData.split("");
+    pastedValues.forEach((value, index) => {
+      newValues[index] = value;
+    });
+    setCodes(newValues);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -80,16 +108,6 @@ const LandingPage = () => {
 
     return () => clearInterval(interval);
   }, []);
-
-  const loginWithX = ()=>{
-    if(codes.join('').length < CODES_LENGTH){
-      message.warning('Please input invitation code')
-      return
-    }
-    authX({invitationCode: codes.join('')})
-  }
-    
-
 
   return (
     <div className="landing_container">
@@ -113,6 +131,7 @@ const LandingPage = () => {
                       ref={(el: HTMLInputElement) =>
                         (inputsRef.current[index] = el)
                       }
+                      onPaste={handleInvationCodePaste}
                       type="text"
                       className="code_input"
                       value={value}
@@ -126,7 +145,12 @@ const LandingPage = () => {
                   Don't have one? Visit our{" "}
                   <div className="discord_text"> Discord</div>
                 </div>
-                <div className="twitter cursor-pointer font-bolder" onClick={loginWithX}>Login with X</div>
+                <div
+                  className="twitter cursor-pointer font-bolder"
+                  onClick={loginWithX}
+                >
+                  Login with X
+                </div>
               </div>
             </div>
           </div>
