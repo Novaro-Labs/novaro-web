@@ -27,9 +27,8 @@ import { TNft } from "../../types/token-types";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { config } from "../../wagmi";
 import mockNfts from "../../mock-data/nfts";
-import NiceModal from "@ebay/nice-modal-react";
-// import ModalCreateNFT from "./ModalCreateNFT";
 import CreateTokenModal from "@/components/createTokenModal";
+import { getImages } from "@/api/asset-apis.ts";
 
 const TokenPage = () => {
   const { address, isConnected } = useAccount();
@@ -120,6 +119,12 @@ const TokenPage = () => {
   //     getTokens();
   //   }
   // }, [boundTokenAccount]);
+
+  useEffect(() => {
+    getImages({ sourceId: "123456"}).then(res => {
+      console.log('res', res)
+    })
+  }, [])
 
   const filterTokens =
     searchValue === ""

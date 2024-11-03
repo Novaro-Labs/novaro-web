@@ -17,16 +17,19 @@ const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisib
     reader.readAsDataURL(img);
   };
 
+  // limit file type and size less than 4MB
   const beforeUpload = (file: FileType) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = ["image/png", "image/jpeg", "image/webp", "image/gif"].includes(file.type);
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+      message.error('You can only upload jpeg/png/webp/gif file!');
+      return;
     }
-    const isLt2M = file.size / 1024 / 1024 < 2;
-    if (!isLt2M) {
-      message.error('Image must smaller than 2MB!');
+    const isLt4M = file.size / 1024 / 1024 < 4;
+    if (!isLt4M) {
+      message.error('Image must smaller than 4MB!');
+      return;
     }
-    return isJpgOrPng && isLt2M;
+    return isJpgOrPng && isLt4M;
   };
 
   const handleChange: UploadProps['onChange'] = (info) => {

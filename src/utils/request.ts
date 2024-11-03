@@ -1,8 +1,10 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
+const baseUrl = import.meta.env.VITE_BASE_URL
+
 // 创建 Axios 实例
 const instance: AxiosInstance = axios.create({
-  baseURL: 'http://13.212.174.10:8080/',
+  baseURL: baseUrl,
   timeout: 10000,
 });
 
