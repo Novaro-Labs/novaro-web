@@ -28,8 +28,9 @@ import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { config } from "../../wagmi";
 import mockNfts from "../../mock-data/nfts";
 import CreateTokenModal from "@/components/createTokenModal";
-import { getImages } from "@/api/asset-apis.ts";
+import { getImages, postUploadImages } from "@/api/asset-apis.ts";
 
+const baseUrl = import.meta.env.VITE_BASE_URL
 const TokenPage = () => {
   const { address, isConnected } = useAccount();
   const { writeContractAsync } = useWriteContract();

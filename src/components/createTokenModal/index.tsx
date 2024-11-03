@@ -2,20 +2,19 @@ import { useState } from "react";
 import { Modal, Upload, message, Input } from "antd";
 import NovButton from "@/components/Basic/Button/NovButton.tsx";
 import "./index.less"
-import type { GetProp, UploadProps } from 'antd';
+import type { GetProp, UploadProps, UploadFile } from 'antd';
 import UploadImage from "@/assets/svg/upload.svg"
 import Star from "@/assets/svg/star.svg"
+import { generateRandomSourceId } from "@/utils/utils.ts";
+import { postUploadImages } from "@/api/asset-apis.ts";
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
+const baseUrl = import.meta.env.VITE_BASE_URL
+
 const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisible }) => {
   const [imageUrl, setImageUrl] = useState<string>()
-
-  const getBase64 = (img: FileType, callback: (url: string) => void) => {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result as string));
-    reader.readAsDataURL(img);
-  };
+  const [imageFileList, setImageFileList] = useState<any>([])
 
   // limit file type and size less than 4MB
   const beforeUpload = (file: FileType) => {
@@ -32,19 +31,18 @@ const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisib
     return isJpgOrPng && isLt4M;
   };
 
-  const handleChange: UploadProps['onChange'] = (info) => {
-    if (info.file.status === 'uploading') {
-      // setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as FileType, (url) => {
-        // setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
+  const customRequest = (options: any) => {
+    postUploadImages({
+      image: options.file,
+      sourceId: generateRandomSourceId()
+    }).then(res => {
+      console.log('res', res)
+      if (res.msg === "success") {
+        setImageUrl(baseUrl + res.data[0].path)
+        setImageFileList([res.data[0]])
+      }
+    })
+  }
 
   const uploadButton = (
     <button className="defaultUploadBtn" type="button">
@@ -55,10 +53,13 @@ const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisib
   );
 
   const lanuchToken = () => {
-    handleVisible(false)
+    console.log('img', imageFileList)
+    handleCancel()
   }
   const handleCancel = () => {
     handleVisible(false)
+    setImageUrl('')
+    setImageFileList([])
   }
 
   return (
@@ -82,9 +83,8 @@ const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisib
                 listType="picture-card"
                 className="avatar-uploader"
                 showUploadList={false}
-                action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
                 beforeUpload={beforeUpload}
-                onChange={handleChange}
+                customRequest={customRequest}
               >
                 {imageUrl ?
                   <img src={imageUrl} alt="avatar" style={{ width: "100%", height: "100%" }} /> : uploadButton}

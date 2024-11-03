@@ -56,3 +56,10 @@ export const debounce = (func: Function, delay: number) => {
     timeoutId = setTimeout(() => func(...args), delay);
   };
 };
+
+// 生成六位随机数
+export const generateRandomSourceId = (): string => {
+  const min = 100000;
+  const max = 999999;
+  return Math.floor(Math.random() * (max - min + 1)) + min + '';
+};

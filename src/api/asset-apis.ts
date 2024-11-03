@@ -1,9 +1,16 @@
 import { request } from "@/utils/request.ts";
 
-export const postUploadImages = ({ images, sourceId }: { images: File, sourceId: string; }): Promise<any> =>
-  request.post("/v1/api/upload/files", {
-    body: { images, sourceId },
+export const postUploadImages = ({ image, sourceId }: { image: File, sourceId: string; }): Promise<any> => {
+  const formData = new FormData();
+  formData.append(`images`,image);
+  formData.append('sourceId', sourceId);
+
+  return request.post("/v1/api/upload/files", formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
+};
 
 export const getImages = ({ sourceId }: { sourceId: string; }): Promise<any> =>
   request.get("/v1/api/upload/getTokenImg", {
