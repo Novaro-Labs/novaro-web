@@ -21,7 +21,6 @@ import Discord from "@/assets/landing-page/Discord.png";
 import Medium from "@/assets/landing-page/Medium.png";
 import Medium1 from "@/assets/landing-page/Medium1.png";
 import HeroSectionBg from "./HeroSectionBg";
-import { request } from "@/utils/request";
 import { authX } from "@/api/auth-apis";
 import { message } from "antd";
 

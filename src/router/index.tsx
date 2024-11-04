@@ -1,11 +1,12 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import Main from "../pages/main";
-import HomePage from "../pages/home-page";
-import LandingPage from "../pages/landing-page";
-import ProfilePage from "../pages/profile-page";
-import SpacePage from "../pages/space-page";
-import TokenPage from "../pages/token-page";
-import TokenDetailPage from "../pages/token-detail-page";
+import Main from "@/pages/main";
+import HomePage from "@/pages/home-page";
+import LandingPage from "@/pages/landing-page";
+import ProfilePage from "@/pages/profile-page";
+import SpacePage from "@/pages/space-page";
+import TokenPage from "@/pages/token-page";
+import TokenDetailPage from "@/pages/token-detail-page";
+import AuthCallbackPage from "@/pages/auth-callback-page";
 
 import { ReactNode } from "react";
 import { useAccount } from "wagmi";
@@ -29,6 +30,10 @@ const routes = [
         element: <Navigate to="home" replace />,
       },
       {
+        path: "/auth/:authProvider/callback",
+        element: <AuthCallbackPage />,
+      },
+      {
         path: "home",
         element: <PrivateRoute element={<HomePage />} />,
       },
@@ -46,8 +51,8 @@ const routes = [
       },
       {
         path: "token-detail",
-        element: <PrivateRoute element={<TokenDetailPage />} />
-      }
+        element: <PrivateRoute element={<TokenDetailPage />} />,
+      },
     ],
   },
 ];
