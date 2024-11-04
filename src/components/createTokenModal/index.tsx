@@ -14,6 +14,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL
 
 const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisible }) => {
   const [imageUrl, setImageUrl] = useState<string>()
+  const [sourceId, setSourceId] = useState<string>()
   const [imageFileList, setImageFileList] = useState<any>([])
 
   // limit file type and size less than 4MB
@@ -31,15 +32,15 @@ const CreateTokenModal = ({ confirmLoading = false, visible = false, handleVisib
     return isJpgOrPng && isLt4M;
   };
 
+  // custom upload image
   const customRequest = (options: any) => {
     postUploadImages({
-      image: options.file,
-      sourceId: generateRandomSourceId()
+      image: options.file
     }).then(res => {
-      console.log('res', res)
       if (res.msg === "success") {
         setImageUrl(baseUrl + res.data[0].path)
         setImageFileList([res.data[0]])
+        setSourceId(res.data[0].sourceId)
       }
     })
   }
