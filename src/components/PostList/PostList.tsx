@@ -3,7 +3,7 @@ import PostItem from "./PostItem";
 
 function PostList({posts}: {posts: TPost[]}) {
   return (
-    <div className="bg-white pt-4 space-y-10">
+    <div className="bg-white pt-8 space-y-10">
       {posts.map((post) => (
         <PostItem post={post} key={post.id} />
       ))}
