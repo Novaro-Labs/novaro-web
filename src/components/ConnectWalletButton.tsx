@@ -45,7 +45,7 @@ export default function ConnectWalletButton({
                   // navigate to home
                 }}
                 className={cn(
-                  "relative mt-4 flex select-none items-center overflow-hidden whitespace-nowrap rounded-full font-bold group",
+                  "relative flex select-none items-center overflow-hidden whitespace-nowrap rounded-full group",
                   className
                 )}
               >

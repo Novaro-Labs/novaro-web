@@ -1,4 +1,5 @@
 import logo from "@/assets/landing-page/logo.png";
+import ConnectWalletButton from "@/components/ConnectWalletButton";
 import HeroSectionBg from "@/components/HeroSectionBg";
 import { Button, Modal } from "antd";
 import { useEffect, useState } from "react";
@@ -94,14 +95,7 @@ const AuthCallbackPage = () => {
           <Button key="back" onClick={loginWithoutWallet}>
             Skip Wallet
           </Button>
-          <Button
-            key="link"
-            href="https://google.com"
-            type="primary"
-            onClick={handleOk}
-          >
-            Connect Now
-          </Button>
+          <ConnectWalletButton className="bg-[#436BD1] px-8 rounded-lg text-white h-10"/>
         </div>
       </Modal>
     </div>

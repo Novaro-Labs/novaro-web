@@ -155,7 +155,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="mt-3">
-            <ConnectWalletButton className="bg-[#030305] px-8 text-white h-12 " />
+            <ConnectWalletButton className="bg-[#030305] px-8 text-white h-12 font-bold mt-4" />
           </div>
         </div>
       </div>
