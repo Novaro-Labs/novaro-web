@@ -1,12 +1,12 @@
-import { Outlet} from "react-router-dom";
 import Sidebar from "@/components/Basic/Sidebar";
-import "./index.less"
+import { Outlet } from "react-router-dom";
+import "./index.less";
 
 const Main = () => {
     return (
         <div className="main-container">
             <Sidebar/>
-            <div className="content">
+            <div className="flex-1 bg-white">
                 <Outlet/>
             </div>
         </div>

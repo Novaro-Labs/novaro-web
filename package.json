@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.5.1",
     "@ebay/nice-modal-react": "^1.2.13",
     "@iconify/react": "^5.0.2",
     "@rainbow-me/rainbowkit": "^2.1.4",
