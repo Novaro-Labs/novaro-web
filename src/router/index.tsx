@@ -10,6 +10,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import NotFound from "@/components/NotFound";
 import { ReactNode } from "react";
+import CryptosPage from "@/pages/cryptos-page";
 
 const PrivateRoute: React.FC<{ element: ReactNode }> = ({ element }) => {
   // const { isConnected } = useAccount();
@@ -62,6 +63,10 @@ const routes = [
       {
         path: "token-detail",
         element: <PrivateRoute element={<TokenDetailPage />} />,
+      },
+      {
+        path: "cryptos",
+        element: <PrivateRoute element={<CryptosPage />} />,
       },
     ],
   },

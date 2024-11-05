@@ -5,7 +5,7 @@ const Tabs = ({ children }:{children: ReactNode[]}) => {
     const [activeTab, setActiveTab] = useState(0);
 
     return (
-        <div className="tabs">
+        <div className="tabs w-full">
             <div className="tab-list">
                 {React.Children.map(children, (child, index) => (
                     <div
@@ -26,7 +26,7 @@ const Tabs = ({ children }:{children: ReactNode[]}) => {
 };
 
 const TabPane = ({ children }:{children: ReactNode,label?:string}) => {
-    return <div>{children}</div>;
+    return <div className='w-full'>{children}</div>;
 };
 
 export { Tabs, TabPane };

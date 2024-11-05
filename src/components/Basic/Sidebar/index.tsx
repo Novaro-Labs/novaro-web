@@ -5,10 +5,12 @@ import HomeIcon from "../../../assets/common/home-icon.svg";
 import HomeActiveIcon from "../../../assets/common/home-active-icon.svg";
 import SpaceIcon from "../../../assets/common/space-icon.svg";
 import SpaceActiveIcon from "../../../assets/common/space-active-icon.svg";
-import TokenIcon from "../../../assets/common/token-icon.svg";
-import TokenActiveIcon from "../../../assets/common/token-active-icon.svg";
+import TokenIcon from "../../../assets/common/token-icon.png";
+import TokenActiveIcon from "../../../assets/common/token-active-icon.png";
 import ProfileIcon from "../../../assets/common/profile-icon.svg";
 import ProfileActiveIcon from "../../../assets/common/profile-active-icon.svg";
+import CryptosIcon from "../../../assets/common/cryptos-icon.svg";
+import CryptosActiveIcon from "../../../assets/common/cryptos-active-icon.svg";
 
 const MENU_DICT: Record<
   string,
@@ -33,6 +35,11 @@ const MENU_DICT: Record<
     icon: ProfileIcon,
     activeIcon: ProfileActiveIcon,
     title: "Profile",
+  },
+  cryptos: {
+    icon: CryptosIcon,
+    activeIcon: CryptosActiveIcon,
+    title: "Cryptos",
   },
 } as const;
 
@@ -67,7 +74,7 @@ const NavLinkItem = ({ to, label }: NavLinkItemProps) => {
 };
 const Sidebar = () => {
   return (
-    <div className="sidebar">
+    <div className="sidebar sticky top-0">
       <NavLink to="/home" className="logo">
         <img src={logo} width={42} height={42} alt="Logo" />
       </NavLink>
@@ -76,6 +83,7 @@ const Sidebar = () => {
           <NavLinkItem to="/home" label="Home" />
           <NavLinkItem to="/space" label="Space" />
           <NavLinkItem to="/token" label="Token" />
+          <NavLinkItem to="/cryptos" label="Cryptos" />
           <NavLinkItem to="/profile" label="Profile" />
         </ul>
       </nav>
