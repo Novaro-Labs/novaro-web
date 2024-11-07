@@ -49,7 +49,6 @@ const AuthCallbackPage = () => {
       localStorage.setItem("x_auth_code", code);
       localStorage.setItem("x_auth_time", String(Date.now()));
     } else {
-      console.log('1111')
       const errorModal = Modal.warning({
         title: "Warning",
         content: "Auth error",

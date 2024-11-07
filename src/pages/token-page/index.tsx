@@ -1,36 +1,43 @@
-import "./index.less";
-import logo from "@/assets/img/logo.svg";
 import dstAccountIcon from "@/assets/img/dst-account-icon.png";
+import logo from "@/assets/img/logo.svg";
 import tokenWalletBg from "@/assets/img/token-wallet-bg.png";
+import "./index.less";
 //@ts-ignore
 import { Input } from "@web3uikit/core";
 //@ts-ignore
-import { Search } from "@web3uikit/icons";
-import TokenCard from "./TokenCard";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { readContract } from "@wagmi/core";
+import { Search } from "@web3uikit/icons";
+import { useAccount, useWriteContract } from "wagmi";
+import TokenCard from "./TokenCard";
 
-import dstContract from "../../abi/tokens/DynamicSocialToken.json";
 import clientContract from "../../abi/client/NovaroClient.json";
-import accountRegistryContract from "../../abi/account/ERC6551Registry.json";
+import dstContract from "../../abi/tokens/DynamicSocialToken.json";
 
 import {
-  ACCOUNT_REGISTRY_CONTRACT_ADDRESS_LOCAL,
+  ACCOUNT_FACTORY_CONTRACT_ADDRESS_LOCAL,
   CLIENT_CONTRACT_ADDRESS_LOCAL,
-  DST_CONTRACT_ADDRESS_LOCAL,
 } from "../../constants";
 
-import "./index.less";
-import { useEffect, useState } from "react";
-import { cn } from "../../utils/utils";
-import { TNft } from "../../types/token-types";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { config } from "../../wagmi";
-import mockNfts from "../../mock-data/nfts";
+import { getImages } from "@/api/asset-apis.ts";
 import CreateTokenModal from "@/components/createTokenModal";
-import { getImages, postUploadImages } from "@/api/asset-apis.ts";
+import { confirmPromise } from "@/utils/helpers";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
+import { message } from "antd";
+import { useEffect, useState } from "react";
+import { localhost } from "viem/chains";
+import mockNfts from "../../mock-data/nfts";
+import { TNft } from "../../types/token-types";
+import { cn } from "../../utils/utils";
+import { config } from "../../wagmi";
+import "./index.less";
 
-const baseUrl = import.meta.env.VITE_BASE_URL
+const clientCommonParams: any = {
+  address: CLIENT_CONTRACT_ADDRESS_LOCAL,
+  chainId: 1337,
+  abi: clientContract.abi,
+};
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 const TokenPage = () => {
   const { address, isConnected } = useAccount();
   const { writeContractAsync } = useWriteContract();
@@ -39,93 +46,175 @@ const TokenPage = () => {
   const [followerPassTokens, setFollowerPassTokens] =
     useState<TNft[]>(mockNfts);
   const [createTokenLoading, setCreateTokenLoading] = useState(false);
-  const [boundTokenAccount, setBoundTokenAccount] = useState(
-    "0xEEd3A32BA722A2E76e603B730874c5112092278b"
-  );
+  const [boundTokenAccount, setBoundTokenAccount] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const init = async () => {
+  const getBoundTokenAccount = async () => {
+    const boundTokenAccount =
+      ((await readContract(config as any, {
+        ...clientCommonParams,
+        functionName: "getBoundAccount",
+        args: [address],
+      })) as string) || "";
+
+    console.log("boundTokenAccount", boundTokenAccount);
+    let account =
+      boundTokenAccount === "0x0000000000000000000000000000000000000000"
+        ? ""
+        : boundTokenAccount;
+    setBoundTokenAccount(account);
+    return account;
+  };
+
+  const createBoundTokenAccount = async () => {
     try {
-      const boundTokenAccount = (await readContract(config as any, {
-        address: ACCOUNT_REGISTRY_CONTRACT_ADDRESS_LOCAL,
+      const dynamicSocialTokenAddress = (await readContract(config as any, {
+        ...clientCommonParams,
+        functionName: "getDynamicSocialToken",
+      })) as `0x${string}`;
+
+      let tokenId = (await readContract(config as any, {
+        address: dynamicSocialTokenAddress,
         chainId: 1337,
-        abi: accountRegistryContract.abi,
-        functionName: "account",
+        abi: dstContract.abi,
+        functionName: "getDstTokenId",
+        args: [address],
+      })) as string;
+      console.log({ originTokenId: tokenId, address });
+
+      if (!tokenId) {
+        await writeContractAsync({
+          chain: localhost,
+          address: dynamicSocialTokenAddress,
+          chainId: 1337,
+          abi: dstContract.abi,
+          functionName: "mint",
+          args: [address, 0],
+          nonce: 0,
+        });
+        tokenId = (await readContract(config as any, {
+          address: dynamicSocialTokenAddress,
+          chainId: 1337,
+          abi: dstContract.abi,
+          functionName: "getDstTokenId",
+          args: [address],
+        })) as string;
+      }
+
+      let owner = (await readContract(config as any, {
+        address: dynamicSocialTokenAddress,
+        chainId: 1337,
+        abi: dstContract.abi,
+        functionName: "ownerOf",
+        args: [tokenId],
+      })) as string;
+
+      console.log({ owner });
+
+      const boundTokenAccount = (await readContract(config as any, {
+        address: CLIENT_CONTRACT_ADDRESS_LOCAL,
+        chainId: 1337,
+        abi: clientContract.abi,
+        functionName: "createOrFetchAccount",
         args: [
-          "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+          ACCOUNT_FACTORY_CONTRACT_ADDRESS_LOCAL,
           1337,
-          "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+          dynamicSocialTokenAddress,
+          tokenId,
           1,
-          12345,
+          "0x",
         ],
       })) as string;
-      setBoundTokenAccount(boundTokenAccount);
+      if (boundTokenAccount) {
+        setVisible(true);
+        setBoundTokenAccount(boundTokenAccount);
+      }
     } catch (error) {
       console.error(error);
     }
   };
 
-  const { data: tokenId } = useReadContract({
-    address: DST_CONTRACT_ADDRESS_LOCAL,
-    chainId: 1337,
-    abi: dstContract.abi,
-    functionName: "getDstTokenId",
-    args: [address],
-  });
+  const invokeCreateToken = async () => {
+    try {
+      setCreateTokenLoading(true);
+      if (!boundTokenAccount) {
+        const confirmCreateAccount = await confirmPromise({
+          icon: null,
+          width: 360,
+          closable: true,
+          content: (
+            <div className="font-medium text-2xl text-center mb-6 px-14">
+              Connect and Claim your Token Account
+            </div>
+          ),
+          cancelText: "Cancel",
+          okText: "Confirm",
+          centered: true,
+        });
+        if (!confirmCreateAccount) {
+          setCreateTokenLoading(false);
+          return;
+        }
+      }
+      await createBoundTokenAccount();
+      setCreateTokenLoading(false);
+    } catch (err) {
+      message.error("Error creating token");
+      setCreateTokenLoading(false);
+    }
+  };
 
-  const createToken = async () => {
-    setVisible(true)
-    // setCreateTokenLoading(true);
-    // await writeContractAsync({
-    //   address: CLIENT_CONTRACT_ADDRESS_LOCAL,
-    //   chainId: 1337,
-    //   abi: clientContract.abi,
-    //   functionName: "createFollowerPassToken",
-    //   args: [
-    //     "test",
-    //     "_test",
-    //     "https://www.baidu.com/img/flexible/logo/pc/result.png",
-    //     "it's a test",
-    //     boundTokenAccount,
-    //   ],
-    // });
-    // await NiceModal.show(ModalCreateNFT);
-    // setTimeout(() => {
-    //   setCreateTokenLoading(false);
-    //   NiceModal.show(ModalCreateNFT);
-    // }, 2000);
-    // getTokens();
+  const handleCreateToken = async ({
+    tokenName,
+    tokenSymbol,
+    tokenDescription,
+    sourceId,
+  }: {
+    tokenName: string;
+    tokenSymbol: string;
+    tokenDescription: string;
+    sourceId: string;
+  }) => {
+    await writeContractAsync({
+      chain: localhost,
+      address: CLIENT_CONTRACT_ADDRESS_LOCAL,
+      chainId: 1337,
+      abi: clientContract.abi,
+      functionName: "createFollowerPassToken",
+      args: [tokenName, tokenSymbol, sourceId, tokenDescription],
+      nonce: 0,
+    });
+    getTokens()
   };
 
   const getTokens = async () => {
-    const token = (await readContract(config as any, {
+    const tokens = (await readContract(config as any, {
       address: CLIENT_CONTRACT_ADDRESS_LOCAL,
       abi: clientContract.abi,
-      functionName: "getFollowerPassTokenData",
-      args: [address, boundTokenAccount, "_test"],
+      functionName: "getAllFollowerPassToken",
     })) as any;
-    setFollowerPassTokens([token]);
+    console.log(tokens)
   };
 
-  // useEffect(() => {
-  //   if (isConnected && address) {
-  //     init();
-  //   }
-  // }, [isConnected]);
-
-  // useEffect(() => {
-  //   if (boundTokenAccount) {
-  //     getTokens();
-  //   }
-  // }, [boundTokenAccount]);
+  useEffect(() => {
+    if (isConnected && address) {
+      getBoundTokenAccount();
+    }
+  }, [isConnected]);
 
   useEffect(() => {
-    getImages({ sourceId: "123456"}).then(res => {
-      console.log('res', res)
-    })
-  }, [])
+    if (boundTokenAccount) {
+      getTokens();
+    }
+  }, [boundTokenAccount]);
+
+  useEffect(() => {
+    getImages({ sourceId: "123456" }).then((res) => {
+      console.log("res", res);
+    });
+  }, []);
 
   const filterTokens =
     searchValue === ""
@@ -133,13 +222,13 @@ const TokenPage = () => {
       : followerPassTokens.filter((x) => x.name.includes(searchValue));
 
   const handleVisible = (v: boolean | ((prevState: boolean) => boolean)) => {
-    setVisible(v)
-  }
+    setVisible(v);
+  };
 
   return (
     <div className="pl-8 py-8">
       <div className="flex gap-20">
-        <div className="space-y-6">
+        <div className="space-y-8">
           <img src={logo} className="h-6 w-auto" />
           <div className="text-2xl font-extrabold">
             Create Your Own Token, Attract More Followers
@@ -157,10 +246,10 @@ const TokenPage = () => {
           ) : (
             <button
               className={cn(
-                "btn rounded px-6 h-10 flex justify-center items-center text-white bg-blue-500",
+                "btn rounded-xl px-8 h-12 flex justify-center items-center text-white bg-blue-500",
                 createTokenLoading && "loading"
               )}
-              onClick={createToken}
+              onClick={invokeCreateToken}
             >
               Create Token
             </button>
@@ -173,7 +262,7 @@ const TokenPage = () => {
               className="w-full h-auto absolute top-0 left-0"
             />
             <div className="relative z-10 w-full space-y-4 p-6 font-bold">
-              <div className="flex space-x-2">
+              <div className="flex space-x-4">
                 <img src={dstAccountIcon} className="h-6 w-auto" />
                 <span>DST Account</span>
               </div>
@@ -211,6 +300,7 @@ const TokenPage = () => {
         visible={visible}
         handleVisible={handleVisible}
         confirmLoading={confirmLoading}
+        onLaunch={handleCreateToken}
       />
     </div>
   );

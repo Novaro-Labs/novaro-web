@@ -8,12 +8,10 @@ function App() {
   const { isConnected, address } = useAccount();
 
   useEffect(() => {
+    // 暂时作为钱包登录的方式
     if (isConnected) {
       localStorage.setItem("x_auth_code", String(address));
       localStorage.setItem("x_auth_time", String(Date.now()));
-    } else {
-      localStorage.removeItem("x_auth_code");
-      localStorage.removeItem("x_auth_time");
     }
   }, [isConnected]);
 

@@ -1,16 +1,16 @@
+import CryptosActiveIcon from "@/assets/common/cryptos-active-icon.svg";
+import CryptosIcon from "@/assets/common/cryptos-icon.svg";
+import HomeActiveIcon from "@/assets/common/home-active-icon.svg";
+import HomeIcon from "@/assets/common/home-icon.svg";
+import ProfileActiveIcon from "@/assets/common/profile-active-icon.svg";
+import ProfileIcon from "@/assets/common/profile-icon.svg";
+import SpaceActiveIcon from "@/assets/common/space-active-icon.svg";
+import SpaceIcon from "@/assets/common/space-icon.svg";
+import TokenActiveIcon from "@/assets/common/token-active-icon.png";
+import TokenIcon from "@/assets/common/token-icon.png";
+import logo from "@/assets/svg/logo.svg";
 import { NavLink } from "react-router-dom";
 import "./index.less";
-import logo from "../../../assets/svg/logo.svg";
-import HomeIcon from "../../../assets/common/home-icon.svg";
-import HomeActiveIcon from "../../../assets/common/home-active-icon.svg";
-import SpaceIcon from "../../../assets/common/space-icon.svg";
-import SpaceActiveIcon from "../../../assets/common/space-active-icon.svg";
-import TokenIcon from "../../../assets/common/token-icon.png";
-import TokenActiveIcon from "../../../assets/common/token-active-icon.png";
-import ProfileIcon from "../../../assets/common/profile-icon.svg";
-import ProfileActiveIcon from "../../../assets/common/profile-active-icon.svg";
-import CryptosIcon from "../../../assets/common/cryptos-icon.svg";
-import CryptosActiveIcon from "../../../assets/common/cryptos-active-icon.svg";
 
 const MENU_DICT: Record<
   string,

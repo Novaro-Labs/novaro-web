@@ -1,6 +1,6 @@
 
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import { arbitrum, base, mainnet, optimism, polygon, localhost  } from 'wagmi/chains';
+import { arbitrum, base, localhost, mainnet, optimism, polygon } from 'wagmi/chains';
 
 export const config = getDefaultConfig({
   appName: 'navaro-web',

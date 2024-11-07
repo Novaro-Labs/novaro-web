@@ -9,13 +9,14 @@ import TokenPage from "@/pages/token-page";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import NotFound from "@/components/NotFound";
-import { ReactNode } from "react";
 import CryptosPage from "@/pages/cryptos-page";
+import { ReactNode } from "react";
 
 const PrivateRoute: React.FC<{ element: ReactNode }> = ({ element }) => {
   // const { isConnected } = useAccount();
   let x_auth_code = localStorage.getItem("x_auth_code");
   const x_auth_time = localStorage.getItem("x_auth_time");
+  console.log({ x_auth_code, x_auth_time });
   if (
     x_auth_time &&
     Date.now() - Number(x_auth_time) > 1000 * 60 * 60 * 24 * 30
