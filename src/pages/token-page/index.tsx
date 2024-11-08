@@ -68,9 +68,9 @@ const TokenPage = () => {
     return account;
   };
 
-  /** 
+  /**
    * 创建 bound token account
-  */
+   */
   const createBoundTokenAccount = async () => {
     try {
       const dynamicSocialTokenAddress = (await readContract(config as any, {
@@ -95,7 +95,6 @@ const TokenPage = () => {
           abi: dstContract.abi,
           functionName: "mint",
           args: [address, 0],
-          nonce: 12,
         });
         tokenId = (await readContract(config as any, {
           address: dynamicSocialTokenAddress,
@@ -198,16 +197,17 @@ const TokenPage = () => {
         abi: clientContract.abi,
         functionName: "createFollowerPassToken",
         args: [tokenName, tokenSymbol, sourceId, tokenDescription],
-        nonce: 12,
       });
       getTokens();
       setLaunchTokenVisible(false);
       setConfirmLoading(false);
+      return true;
     } catch (err) {
       message.error("Error creating token");
       setCreateTokenLoading(false);
       setConfirmLoading(false);
     }
+    return false;
   };
 
   /** 获取当前用户所有创建的token */

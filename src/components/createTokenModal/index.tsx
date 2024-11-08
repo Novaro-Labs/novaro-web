@@ -15,7 +15,7 @@ const CreateTokenModal = ({
   confirmLoading = false,
   visible = false,
   handleVisible,
-  onLaunch = async () => {},
+  onLaunch = async () => false,
 }: {
   confirmLoading?: boolean;
   visible?: boolean;
@@ -25,7 +25,7 @@ const CreateTokenModal = ({
     tokenSymbol: string;
     tokenDescription: string;
     sourceId: string;
-  }) => Promise<void>;
+  }) => Promise<boolean>;
 }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [tokenName, setTokenName] = useState("");
@@ -94,17 +94,19 @@ const CreateTokenModal = ({
       return;
     }
     try {
-      await onLaunch({
+      const result = await onLaunch({
         tokenName,
         tokenSymbol,
         tokenDescription,
         sourceId,
       });
-      setImageUrl("");
-      setImageFileList([]);
-      setTokenName("");
-      setTokenSymbol("");
-      setDescription("");
+      if (result) {
+        setImageUrl("");
+        setImageFileList([]);
+        setTokenName("");
+        setTokenSymbol("");
+        setDescription("");
+      }
     } catch (err) {
       message.error("Error creating token");
     }

@@ -27,7 +27,7 @@ export default function NFTCard({ nft }: { nft: TNft }) {
             {nft.deployer}
           </a>
         </div>
-        <div className="text-black/70">{nft.des}</div>
+        <div className="text-black/70 h-[72px]">{nft.des}</div>
         <input
           placeholder="Enter the Amount"
           className="w-full border border-[#eee] h-10 px-2 bg-black/5 rounded"
