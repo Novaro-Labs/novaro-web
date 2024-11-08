@@ -4,7 +4,7 @@ export type TNft = {
   id: string;
   name: string;
   des: string;
-  imageUrl: string;
+  sourceId: string;
   price: number;
   createdAt: Date;
   creator: TUser;

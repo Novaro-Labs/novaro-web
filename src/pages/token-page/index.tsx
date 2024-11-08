@@ -18,14 +18,12 @@ import {
   CLIENT_CONTRACT_ADDRESS_LOCAL,
 } from "../../constants";
 
-import { getImages } from "@/api/asset-apis.ts";
 import CreateTokenModal from "@/components/createTokenModal";
 import { confirmPromise } from "@/utils/helpers";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { message } from "antd";
 import { useEffect, useState } from "react";
 import { localhost } from "viem/chains";
-import mockNfts from "../../mock-data/nfts";
 import { TNft } from "../../types/token-types";
 import { cn } from "../../utils/utils";
 import { config } from "../../wagmi";
@@ -43,14 +41,16 @@ const TokenPage = () => {
   const { writeContractAsync } = useWriteContract();
   const { openConnectModal } = useConnectModal();
 
-  const [followerPassTokens, setFollowerPassTokens] =
-    useState<TNft[]>(mockNfts);
+  const [followerPassTokens, setFollowerPassTokens] = useState<TNft[]>([]);
   const [createTokenLoading, setCreateTokenLoading] = useState(false);
   const [boundTokenAccount, setBoundTokenAccount] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [launchTokenVisible, setLaunchTokenVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  /**
+   * 获取 bound token account
+   */
   const getBoundTokenAccount = async () => {
     const boundTokenAccount =
       ((await readContract(config as any, {
@@ -59,7 +59,7 @@ const TokenPage = () => {
         args: [address],
       })) as string) || "";
 
-    console.log("boundTokenAccount", boundTokenAccount);
+    console.log("boundTokenAccount", address, boundTokenAccount);
     let account =
       boundTokenAccount === "0x0000000000000000000000000000000000000000"
         ? ""
@@ -68,6 +68,9 @@ const TokenPage = () => {
     return account;
   };
 
+  /** 
+   * 创建 bound token account
+  */
   const createBoundTokenAccount = async () => {
     try {
       const dynamicSocialTokenAddress = (await readContract(config as any, {
@@ -92,7 +95,7 @@ const TokenPage = () => {
           abi: dstContract.abi,
           functionName: "mint",
           args: [address, 0],
-          nonce: 0,
+          nonce: 12,
         });
         tokenId = (await readContract(config as any, {
           address: dynamicSocialTokenAddress,
@@ -113,7 +116,8 @@ const TokenPage = () => {
 
       console.log({ owner });
 
-      const boundTokenAccount = (await readContract(config as any, {
+      const boundTokenAccount = (await writeContractAsync({
+        chain: localhost,
         address: CLIENT_CONTRACT_ADDRESS_LOCAL,
         chainId: 1337,
         abi: clientContract.abi,
@@ -128,7 +132,7 @@ const TokenPage = () => {
         ],
       })) as string;
       if (boundTokenAccount) {
-        setVisible(true);
+        setLaunchTokenVisible(true);
         setBoundTokenAccount(boundTokenAccount);
       }
     } catch (error) {
@@ -136,6 +140,11 @@ const TokenPage = () => {
     }
   };
 
+  /** 唤起创建token弹窗
+   * 首先判断有无 bound token account
+   * 没有，先去创建
+   * 有，则打开弹窗
+   */
   const invokeCreateToken = async () => {
     try {
       setCreateTokenLoading(true);
@@ -157,15 +166,18 @@ const TokenPage = () => {
           setCreateTokenLoading(false);
           return;
         }
+        await createBoundTokenAccount();
+        setCreateTokenLoading(false);
+      } else {
+        setLaunchTokenVisible(true);
       }
-      await createBoundTokenAccount();
-      setCreateTokenLoading(false);
     } catch (err) {
       message.error("Error creating token");
       setCreateTokenLoading(false);
     }
   };
 
+  /** 创建 token 方法*/
   const handleCreateToken = async ({
     tokenName,
     tokenSymbol,
@@ -177,25 +189,35 @@ const TokenPage = () => {
     tokenDescription: string;
     sourceId: string;
   }) => {
-    await writeContractAsync({
-      chain: localhost,
-      address: CLIENT_CONTRACT_ADDRESS_LOCAL,
-      chainId: 1337,
-      abi: clientContract.abi,
-      functionName: "createFollowerPassToken",
-      args: [tokenName, tokenSymbol, sourceId, tokenDescription],
-      nonce: 0,
-    });
-    getTokens()
+    setConfirmLoading(true);
+    try {
+      await writeContractAsync({
+        chain: localhost,
+        address: CLIENT_CONTRACT_ADDRESS_LOCAL,
+        chainId: 1337,
+        abi: clientContract.abi,
+        functionName: "createFollowerPassToken",
+        args: [tokenName, tokenSymbol, sourceId, tokenDescription],
+        nonce: 12,
+      });
+      getTokens();
+      setLaunchTokenVisible(false);
+      setConfirmLoading(false);
+    } catch (err) {
+      message.error("Error creating token");
+      setCreateTokenLoading(false);
+      setConfirmLoading(false);
+    }
   };
 
+  /** 获取当前用户所有创建的token */
   const getTokens = async () => {
     const tokens = (await readContract(config as any, {
       address: CLIENT_CONTRACT_ADDRESS_LOCAL,
       abi: clientContract.abi,
       functionName: "getAllFollowerPassToken",
     })) as any;
-    console.log(tokens)
+    setFollowerPassTokens(tokens);
   };
 
   useEffect(() => {
@@ -210,19 +232,13 @@ const TokenPage = () => {
     }
   }, [boundTokenAccount]);
 
-  useEffect(() => {
-    getImages({ sourceId: "123456" }).then((res) => {
-      console.log("res", res);
-    });
-  }, []);
-
   const filterTokens =
     searchValue === ""
       ? followerPassTokens
       : followerPassTokens.filter((x) => x.name.includes(searchValue));
 
   const handleVisible = (v: boolean | ((prevState: boolean) => boolean)) => {
-    setVisible(v);
+    setLaunchTokenVisible(v);
   };
 
   return (
@@ -285,19 +301,26 @@ const TokenPage = () => {
           }
           name="Test text Input"
           value={searchValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSearchValue(e.target.value)
-          }
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            setSearchValue(e.target.value);
+            setFollowerPassTokens(
+              followerPassTokens.filter(
+                (token) =>
+                  token.name.includes(e.target.value) ||
+                  token.des.includes(e.target.value)
+              )
+            );
+          }}
         />
       </div>
       <div className="bg-[#eee] w-full h-[1px] my-8"></div>
-      <div className="flex flex-wrap gap-8">
+      <div className="grid grid-cols-3 gap-12 ">
         {filterTokens.map((nft) => (
           <TokenCard nft={nft} key={nft.id} />
         ))}
       </div>
       <CreateTokenModal
-        visible={visible}
+        visible={launchTokenVisible}
         handleVisible={handleVisible}
         confirmLoading={confirmLoading}
         onLaunch={handleCreateToken}

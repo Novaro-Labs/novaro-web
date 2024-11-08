@@ -41,7 +41,7 @@ const SOCIAL_LIST = [
   },
 ];
 const baseUrl = import.meta.env.VITE_BASE_URL;
-const CODES_LENGTH = 8;
+const CODES_LENGTH = 6;
 
 const LandingPage = () => {
   const navigate = useNavigate();

@@ -15,7 +15,7 @@ const CreateTokenModal = ({
   confirmLoading = false,
   visible = false,
   handleVisible,
-  onLaunch = () => {},
+  onLaunch = async () => {},
 }: {
   confirmLoading?: boolean;
   visible?: boolean;
@@ -25,12 +25,12 @@ const CreateTokenModal = ({
     tokenSymbol: string;
     tokenDescription: string;
     sourceId: string;
-  }) => void;
+  }) => Promise<void>;
 }) => {
-  const [imageUrl, setImageUrl] = useState('');
-  const [tokenName, setTokenName] = useState('');
-  const [tokenSymbol, setTokenSymbol] = useState('');
-  const [tokenDescription, setDescription] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
+  const [tokenName, setTokenName] = useState("");
+  const [tokenSymbol, setTokenSymbol] = useState("");
+  const [tokenDescription, setDescription] = useState("");
   const [sourceId, setSourceId] = useState<string>();
   const [imageFileList, setImageFileList] = useState<any>([]);
 
@@ -79,26 +79,35 @@ const CreateTokenModal = ({
     </button>
   );
 
-  const lanuchToken = () => {
+  const lanuchToken = async () => {
     console.log("img", imageFileList);
-    if(!sourceId){
+    if (!sourceId) {
       message.error("Please upload an image");
       return;
     }
-    if(!tokenName){
+    if (!tokenName) {
       message.error("Please enter token name");
       return;
     }
-    if(!tokenSymbol){
+    if (!tokenSymbol) {
       message.error("Please enter token symbol");
       return;
     }
-    onLaunch({
-      tokenName,
-      tokenSymbol,
-      tokenDescription,
-      sourceId,
-    });
+    try {
+      await onLaunch({
+        tokenName,
+        tokenSymbol,
+        tokenDescription,
+        sourceId,
+      });
+      setImageUrl("");
+      setImageFileList([]);
+      setTokenName("");
+      setTokenSymbol("");
+      setDescription("");
+    } catch (err) {
+      message.error("Error creating token");
+    }
   };
   const handleCancel = () => {
     handleVisible(false);
