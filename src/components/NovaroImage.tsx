@@ -11,7 +11,9 @@ export default function NovaroImage({
 
   useEffect(() => {
     getImages({ sourceId }).then((res) => {
-      setImageSrc(baseUrl + res.data[0].path);
+      if (res.data.length) {
+        setImageSrc(baseUrl + res.data[0].path);
+      }
     });
   }, [sourceId]);
   return imageSrc ? <img src={imageSrc} {...restProps} /> : null;
