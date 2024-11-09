@@ -9,4 +9,5 @@ export type TNft = {
   createdAt: Date;
   creator: TUser;
   deployer:string;
+  token: string
 };

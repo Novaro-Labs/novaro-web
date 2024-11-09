@@ -4,8 +4,8 @@ import { TNft } from "../../types/token-types";
 
 export default function NFTCard({ nft }: { nft: TNft }) {
   let navigate = useNavigate();
-  const routeToDetail = () => {
-    navigate(`/token-detail`);
+  const routeToDetail = (followPassToken: string) => {
+    navigate(`/token-detail/${followPassToken}`);
   };
   return (
     <div className="rounded-xl overflow-hidden border-[2px] border-[#eee] ">
@@ -33,7 +33,7 @@ export default function NFTCard({ nft }: { nft: TNft }) {
           className="w-full border border-[#eee] h-10 px-2 bg-black/5 rounded"
         />
         <button
-          onClick={routeToDetail}
+          onClick={() => routeToDetail(nft.token)}
           className="bg-blue-500 rounded w-full h-10 flex items-center justify-center text-white"
         >
           Buy

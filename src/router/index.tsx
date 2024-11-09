@@ -62,7 +62,7 @@ const routes = [
         element: <PrivateRoute element={<TokenPage />} />,
       },
       {
-        path: "token-detail",
+        path: "token-detail/:followerPassToken",
         element: <PrivateRoute element={<TokenDetailPage />} />,
       },
       {
