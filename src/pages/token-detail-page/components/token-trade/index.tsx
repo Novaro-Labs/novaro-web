@@ -1,33 +1,85 @@
 import { useState} from "react";
+import { useParams } from "react-router-dom";
 import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import NovButton from "../../../../components/Basic/Button/NovButton.tsx";
 import NovButtonGroup from "../../../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
 import InputNumber from "../../../../components/Basic/inputNumber/InputNumber.tsx";
 import "./index.less"
-import { CLIENT_CONTRACT_ADDRESS_LOCAL } from "../../../../constants.ts";
+import { LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL } from "../../../../constants.ts";
 import { TokenTradeEnum } from "../../../../mock-data/token.ts";
-import clientContract from "../../../../abi/client/NovaroClient.json";
+import FollowerPassTokenContract from "@/abi/tokens/FollowerPassToken.json"
 import { ethers } from 'ethers';
+import { readContract } from "@wagmi/core";
+import { config } from "@/wagmi.ts";
+import dstContract from "@/abi/tokens/DynamicSocialToken.json";
+
+type HexString = `0x${string}`;
 
 const TokenTrade = () => {
   const tradeEnums = TokenTradeEnum
   const [title, setTitle] = useState('Buy');
   const [amount, setAmount] = useState(0);
+  const { address, addresses } = useAccount();
 
-  // 创建账户
-  const { address, isConnected } = useAccount();
+  const FollowerPassTokenAddress: HexString = useParams().followerPassToken as HexString;
+
   const { writeContractAsync } = useWriteContract();
+
+
 
   // 调用买合约
   const buyAmountContract = async () => {
-    // 调用buy合约
-    await writeContractAsync({
-      address: CLIENT_CONTRACT_ADDRESS_LOCAL, // 合约地址
-      chainId: 1337,
-      abi: clientContract.abi,
-      functionName: 'buy',
-      args: [address, ethers.parseEther(String(amount))],
-    })
+    try {
+      // 验证地址有效性
+      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL)) {
+        throw new Error('Invalid address');
+      }
+      console.log('amount', ethers.parseEther(String(amount)))
+      // 调用buy合约
+      await writeContractAsync({
+        address: FollowerPassTokenAddress, // 合约地址
+        chainId: 1337,
+        abi: FollowerPassTokenContract.abi,
+        functionName: 'buy',
+        args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL, ethers.parseEther(String(amount))],
+        value: ethers.parseEther(String(1))
+      })
+      console.log('Token purchase successful');
+    } catch (error) {
+      console.error('Error buying token:', error);
+    }
+  }
+
+  // 调用sell contract
+  const sellAmountContract = async () => {
+    try {
+      // 验证地址有效性
+      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL)) {
+        throw new Error('Invalid address');
+      }
+      let sellerBalance = (await readContract(config as any, {
+        address: FollowerPassTokenAddress,
+        chainId: 1337,
+        abi: FollowerPassTokenContract.abi,
+        functionName: "balanceOf",
+        args: [address],
+      })) as string;
+      console.log('seller balance', sellerBalance)
+
+      // 调用buy合约
+      await writeContractAsync({
+        address: FollowerPassTokenAddress, // 合约地址
+        chainId: 1337,
+        abi: FollowerPassTokenContract.abi,
+        functionName: 'sell',
+        args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL, parseInt(String(amount))],
+      })
+
+
+      console.log('Token sell successful');
+    } catch (error) {
+      console.error('Error sell token:', error);
+    }
   }
 
   const handleInputChange = (value: number) => {
@@ -55,7 +107,7 @@ const TokenTrade = () => {
           </div>
         </div>
         <div className="trade_button mt-2">
-          <NovButton width="100%" text="Trade" onClick={buyAmountContract}/>
+          <NovButton width="100%" text="Trade" onClick={ title === 'Buy' ? buyAmountContract : sellAmountContract}/>
         </div>
       </div>
     </div>
