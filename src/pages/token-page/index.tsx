@@ -1,7 +1,6 @@
 import dstAccountIcon from "@/assets/img/dst-account-icon.png";
 import logo from "@/assets/img/logo.svg";
 import tokenWalletBg from "@/assets/img/token-wallet-bg.png";
-import "./index.less";
 //@ts-ignore
 import { Input } from "@web3uikit/core";
 //@ts-ignore
@@ -27,7 +26,6 @@ import { localhost } from "viem/chains";
 import { TNft } from "../../types/token-types";
 import { cn } from "../../utils/utils";
 import { config } from "../../wagmi";
-import "./index.less";
 
 const clientCommonParams: any = {
   address: CLIENT_CONTRACT_ADDRESS_LOCAL,
