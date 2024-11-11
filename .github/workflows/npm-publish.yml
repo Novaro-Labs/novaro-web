@@ -16,8 +16,9 @@ jobs:
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
+          cache-dependency-path: /home/ubuntu/actions-runner/_work/novaro-web/novaro-web/package-lock.json
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm ci
       - run: npm test
-      - run: pm2 restart ui-client
+      - run: pm2 restart react-web3-nft
