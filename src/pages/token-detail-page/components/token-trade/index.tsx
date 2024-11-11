@@ -1,17 +1,18 @@
-import { useState} from "react";
+import FollowerPassTokenContract from "@/abi/tokens/FollowerPassToken.json";
+import { config } from "@/wagmi.ts";
+import { readContract } from "@wagmi/core";
+import { ethers } from 'ethers';
+import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { useAccount, useReadContract, useWriteContract } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 import NovButton from "../../../../components/Basic/Button/NovButton.tsx";
 import NovButtonGroup from "../../../../components/Basic/ButtonGroup/NovButtonGroup.tsx";
 import InputNumber from "../../../../components/Basic/inputNumber/InputNumber.tsx";
-import "./index.less"
-import { LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL } from "../../../../constants.ts";
 import { TokenTradeEnum } from "../../../../mock-data/token.ts";
-import FollowerPassTokenContract from "@/abi/tokens/FollowerPassToken.json"
-import { ethers } from 'ethers';
-import { readContract } from "@wagmi/core";
-import { config } from "@/wagmi.ts";
-import dstContract from "@/abi/tokens/DynamicSocialToken.json";
+import "./index.less";
+
+const LIQUIDITY_POOL_CONTRACT_ADDRESS = import.meta.env.VITE_LIQUIDITY_POOL_CONTRACT_ADDRESS;
+const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID);
 
 type HexString = `0x${string}`;
 
@@ -31,17 +32,17 @@ const TokenTrade = () => {
   const buyAmountContract = async () => {
     try {
       // 验证地址有效性
-      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL)) {
+      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS)) {
         throw new Error('Invalid address');
       }
       console.log('amount', ethers.parseEther(String(amount)))
       // 调用buy合约
       await writeContractAsync({
         address: FollowerPassTokenAddress, // 合约地址
-        chainId: 1337,
+        chainId: CHAIN_ID,
         abi: FollowerPassTokenContract.abi,
         functionName: 'buy',
-        args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL, ethers.parseEther(String(amount))],
+        args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS, ethers.parseEther(String(amount))],
         value: ethers.parseEther(String(1))
       })
       console.log('Token purchase successful');
@@ -54,12 +55,12 @@ const TokenTrade = () => {
   const sellAmountContract = async () => {
     try {
       // 验证地址有效性
-      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL)) {
+      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS)) {
         throw new Error('Invalid address');
       }
       let sellerBalance = (await readContract(config as any, {
         address: FollowerPassTokenAddress,
-        chainId: 1337,
+        chainId: CHAIN_ID,
         abi: FollowerPassTokenContract.abi,
         functionName: "balanceOf",
         args: [address],
@@ -69,10 +70,10 @@ const TokenTrade = () => {
       // 调用buy合约
       await writeContractAsync({
         address: FollowerPassTokenAddress, // 合约地址
-        chainId: 1337,
+        chainId: CHAIN_ID,
         abi: FollowerPassTokenContract.abi,
         functionName: 'sell',
-        args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS_LOCAL, parseInt(String(amount))],
+        args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS, parseInt(String(amount))],
       })
 
 

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "vite",
-    "local": "vite --mode test",
+    "sepolia": "vite --mode test",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

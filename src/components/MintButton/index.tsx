@@ -4,9 +4,10 @@ import {
   useWaitForTransactionReceipt,
   useWriteContract,
 } from "wagmi";
-import "./index.less";
 import dst from "../../abi/tokens/DynamicSocialToken.json";
-import { DST_CONTRACT_ADDRESS_LOCAL } from "../../constants";
+import "./index.less";
+
+const DST_CONTRACT_ADDRESS = import.meta.env.VITE_DST_CONTRACT_ADDRESS;
 
 const MintButton = () => {
   const { address, addresses } = useAccount();
@@ -14,7 +15,7 @@ const MintButton = () => {
 
   const handleMint = () => isPending ||
     writeContract({
-      address: DST_CONTRACT_ADDRESS_LOCAL,
+      address: DST_CONTRACT_ADDRESS,
       abi: dst.abi,
       functionName: "mint",
       args: [address, 157884],

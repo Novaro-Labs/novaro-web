@@ -1,5 +1,4 @@
 import NovaroImage from "@/components/NovaroImage";
-import { CLIENT_CONTRACT_ADDRESS_LOCAL } from "@/constants";
 import { TNft } from "@/types/token-types";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
@@ -7,9 +6,12 @@ import { useAccount } from "wagmi";
 import clientContract from "../../abi/client/NovaroClient.json";
 import { config } from "../../wagmi";
 
+const CLIENT_CONTRACT_ADDRESS = import.meta.env.VITE_CLIENT_CONTRACT_ADDRESS;
+const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID);
+
 const clientCommonParams: any = {
-  address: CLIENT_CONTRACT_ADDRESS_LOCAL,
-  chainId: 1337,
+  address: CLIENT_CONTRACT_ADDRESS,
+  chainId: CHAIN_ID,
   abi: clientContract.abi,
 };
 
@@ -41,7 +43,7 @@ export default function SpaceWallet() {
   /** 获取当前用户所有创建的token */
   const getTokens = async () => {
     const tokens = (await readContract(config as any, {
-      address: CLIENT_CONTRACT_ADDRESS_LOCAL,
+      address: CLIENT_CONTRACT_ADDRESS,
       abi: clientContract.abi,
       functionName: "getAllFollowerPassToken",
     })) as any;

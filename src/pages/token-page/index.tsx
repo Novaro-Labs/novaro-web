@@ -12,24 +12,23 @@ import TokenCard from "./TokenCard";
 import clientContract from "../../abi/client/NovaroClient.json";
 import dstContract from "../../abi/tokens/DynamicSocialToken.json";
 
-import {
-  ACCOUNT_FACTORY_CONTRACT_ADDRESS_LOCAL,
-  CLIENT_CONTRACT_ADDRESS_LOCAL,
-} from "../../constants";
 
 import CreateTokenModal from "@/components/createTokenModal";
 import { confirmPromise } from "@/utils/helpers";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { message } from "antd";
 import { useEffect, useState } from "react";
-import { localhost } from "viem/chains";
 import { TNft } from "../../types/token-types";
 import { cn } from "../../utils/utils";
 import { config } from "../../wagmi";
 
+const ACCOUNT_FACTORY_CONTRACT_ADDRESS = import.meta.env.VITE_ACCOUNT_FACTORY_CONTRACT_ADDRESS;
+const CLIENT_CONTRACT_ADDRESS = import.meta.env.VITE_CLIENT_CONTRACT_ADDRESS;
+const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID);
+
 const clientCommonParams: any = {
-  address: CLIENT_CONTRACT_ADDRESS_LOCAL,
-  chainId: 1337,
+  address: CLIENT_CONTRACT_ADDRESS,
+  chainId: CHAIN_ID,
   abi: clientContract.abi,
 };
 
@@ -57,7 +56,6 @@ const TokenPage = () => {
         args: [address],
       })) as string) || "";
 
-    console.log("boundTokenAccount", address, boundTokenAccount);
     let account =
       boundTokenAccount === "0x0000000000000000000000000000000000000000"
         ? ""
@@ -78,7 +76,7 @@ const TokenPage = () => {
 
       let tokenId = (await readContract(config as any, {
         address: dynamicSocialTokenAddress,
-        chainId: 1337,
+        chainId: CHAIN_ID,
         abi: dstContract.abi,
         functionName: "getDstTokenId",
         args: [address],
@@ -87,16 +85,15 @@ const TokenPage = () => {
 
       if (!tokenId) {
         await writeContractAsync({
-          chain: localhost,
           address: dynamicSocialTokenAddress,
-          chainId: 1337,
+          chainId: CHAIN_ID,
           abi: dstContract.abi,
           functionName: "mint",
           args: [address, 0],
         });
         tokenId = (await readContract(config as any, {
           address: dynamicSocialTokenAddress,
-          chainId: 1337,
+          chainId: CHAIN_ID,
           abi: dstContract.abi,
           functionName: "getDstTokenId",
           args: [address],
@@ -105,7 +102,7 @@ const TokenPage = () => {
 
       let owner = (await readContract(config as any, {
         address: dynamicSocialTokenAddress,
-        chainId: 1337,
+        chainId: CHAIN_ID,
         abi: dstContract.abi,
         functionName: "ownerOf",
         args: [tokenId],
@@ -114,14 +111,13 @@ const TokenPage = () => {
       console.log({ owner });
 
       const boundTokenAccount = (await writeContractAsync({
-        chain: localhost,
-        address: CLIENT_CONTRACT_ADDRESS_LOCAL,
-        chainId: 1337,
+        address: CLIENT_CONTRACT_ADDRESS,
+        chainId: CHAIN_ID,
         abi: clientContract.abi,
         functionName: "createOrFetchAccount",
         args: [
-          ACCOUNT_FACTORY_CONTRACT_ADDRESS_LOCAL,
-          1337,
+          ACCOUNT_FACTORY_CONTRACT_ADDRESS,
+          CHAIN_ID,
           dynamicSocialTokenAddress,
           tokenId,
           1,
@@ -189,9 +185,8 @@ const TokenPage = () => {
     setConfirmLoading(true);
     try {
       await writeContractAsync({
-        chain: localhost,
-        address: CLIENT_CONTRACT_ADDRESS_LOCAL,
-        chainId: 1337,
+        address: CLIENT_CONTRACT_ADDRESS,
+        chainId: CHAIN_ID,
         abi: clientContract.abi,
         functionName: "createFollowerPassToken",
         args: [tokenName, tokenSymbol, sourceId, tokenDescription],
@@ -211,7 +206,7 @@ const TokenPage = () => {
   /** 获取当前用户所有创建的token */
   const getTokens = async () => {
     const tokens = (await readContract(config as any, {
-      address: CLIENT_CONTRACT_ADDRESS_LOCAL,
+      address: CLIENT_CONTRACT_ADDRESS,
       abi: clientContract.abi,
       functionName: "getAllFollowerPassToken",
     })) as any;
