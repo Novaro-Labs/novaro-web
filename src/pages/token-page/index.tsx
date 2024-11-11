@@ -99,17 +99,7 @@ const TokenPage = () => {
           args: [address],
         })) as string;
       }
-
-      let owner = (await readContract(config as any, {
-        address: dynamicSocialTokenAddress,
-        chainId: CHAIN_ID,
-        abi: dstContract.abi,
-        functionName: "ownerOf",
-        args: [tokenId],
-      })) as string;
-
-      console.log({ owner });
-
+      
       const boundTokenAccount = (await writeContractAsync({
         address: CLIENT_CONTRACT_ADDRESS,
         chainId: CHAIN_ID,
