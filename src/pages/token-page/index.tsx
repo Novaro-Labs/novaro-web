@@ -32,7 +32,6 @@ const clientCommonParams: any = {
   abi: clientContract.abi,
 };
 
-const baseUrl = import.meta.env.VITE_BASE_URL;
 const TokenPage = () => {
   const { address, isConnected } = useAccount();
   const { writeContractAsync } = useWriteContract();

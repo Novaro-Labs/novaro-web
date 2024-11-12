@@ -10,11 +10,13 @@ export default function ConnectWalletButton({
   className?: string;
 }) {
   const navigate = useNavigate();
-  const { isConnected,  } = useAccount();
+  const { isConnected, address } = useAccount();
 
   useEffect(() => {
     if (isConnected) {
       navigate("/home");
+      localStorage.setItem("x_auth_code", String(address));
+      localStorage.setItem("x_auth_time", String(Date.now()));
     }
   }, [isConnected]);
 

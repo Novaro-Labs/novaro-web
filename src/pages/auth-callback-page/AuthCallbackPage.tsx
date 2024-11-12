@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.less";
 
-const publicUrl = import.meta.env.PUBLIC_URL;
 
 const AuthCallbackPage = () => {
   const navigate = useNavigate();
