@@ -10,16 +10,19 @@ jobs:
     strategy:
       matrix:
         node-version: [18.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"  # 使用 pnpm 的缓存
+          cache: "pnpm"
       - name: Install pnpm
-        run: npm install -g pnpm  # 全局安装 pnpm
-      - run: pnpm install  # 使用 pnpm 安装依赖
-      - run: pnpm run build  # 使用 pnpm 构建
-      - run: pm2 restart react-web3-nft  # 重启应用
+        run: npm install -g pnpm
+      - name: Set up pnpm in PATH
+        run: echo "$HOME/.npm-global/bin" >> $GITHUB_ENV
+      - name: Check pnpm version
+        run: pnpm --version
+      - run: pnpm install
+      - run: pnpm run build
+      - run: pm2 restart react-web3-nft
