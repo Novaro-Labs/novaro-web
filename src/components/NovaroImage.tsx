@@ -12,7 +12,7 @@ export default function NovaroImage({
   useEffect(() => {
     getImages({ sourceId }).then((res) => {
       if (res.data.length) {
-        setImageSrc(baseUrl + res.data[0].path);
+        setImageSrc(baseUrl + "/" + res.data[0].path);
       }
     });
   }, [sourceId]);

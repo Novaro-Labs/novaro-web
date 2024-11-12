@@ -60,7 +60,7 @@ const CreateTokenModal = ({
       image: options.file,
     }).then((res) => {
       if (res.msg === "success") {
-        setImageUrl(baseUrl + res.data[0].path);
+        setImageUrl(baseUrl + "/" + res.data[0].path);
         setImageFileList([res.data[0]]);
         setSourceId(res.data[0].sourceId);
       }
