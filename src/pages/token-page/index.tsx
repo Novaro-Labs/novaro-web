@@ -209,10 +209,8 @@ const TokenPage = () => {
   }, [isConnected]);
 
   useEffect(() => {
-    if (boundTokenAccount) {
-      getTokens();
-    }
-  }, [boundTokenAccount]);
+     getTokens();
+  }, []);
 
   const filterTokens =
     searchValue === ""
