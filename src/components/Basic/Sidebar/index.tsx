@@ -10,7 +10,6 @@ import TokenActiveIcon from "@/assets/common/token-active-icon.png";
 import TokenIcon from "@/assets/common/token-icon.png";
 import logo from "@/assets/svg/logo.svg";
 import { NavLink } from "react-router-dom";
-import { useDisconnect } from "wagmi";
 import "./index.less";
 
 const MENU_DICT: Record<
@@ -74,16 +73,7 @@ const NavLinkItem = ({ to, label }: NavLinkItemProps) => {
   );
 };
 const Sidebar = () => {
-  const { disconnect } = useDisconnect();
 
-  const signOut = () => {
-    // 退出登录
-    localStorage.removeItem("x_auth_code");
-    localStorage.removeItem("x_auth_time");
-    disconnect()
-
-    window.location.href = "/login";
-  };
   return (
     <div className="sidebar sticky top-0 flex flex-col pt-10 py-20 items-center">
       <div className="flex-1">
@@ -99,14 +89,6 @@ const Sidebar = () => {
             <NavLinkItem to="/profile" label="Profile" />
           </ul>
         </nav>
-      </div>
-      <div className="flex-none">
-        <button
-          className="text-sm  rounded-md border px-6 py-2 text-[#8291A4] hover:bg-black hover:text-white"
-          onClick={signOut}
-        >
-          Sign out
-        </button>
       </div>
     </div>
   );
