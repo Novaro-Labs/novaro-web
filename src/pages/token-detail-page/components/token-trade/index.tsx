@@ -1,6 +1,4 @@
 import FollowerPassTokenContract from "@/abi/tokens/FollowerPassToken.json";
-import { config } from "@/wagmi.ts";
-import { readContract } from "@wagmi/core";
 import { Button, message } from "antd";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
@@ -59,9 +57,10 @@ const TokenTrade = () => {
         chainId: CHAIN_ID,
         abi: FollowerPassTokenContract.abi,
         functionName: "buy",
-        args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, valueInWei],
+        args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, BigInt(valueInWei)],
         value: BigInt(valueInWei),
       });
+      setAmount(0);
       message.success("Token purchase successful");
       setTradeButtonLoading(false);
     } catch (error) {
@@ -75,13 +74,6 @@ const TokenTrade = () => {
     setTradeButtonLoading(true);
 
     try {
-      let sellerBalance = (await readContract(config as any, {
-        address: FollowerPassTokenAddress,
-        chainId: CHAIN_ID,
-        abi: FollowerPassTokenContract.abi,
-        functionName: "balanceOf",
-        args: [address],
-      })) as string;
       const valueInWei = calTotalCostInWei(amount);
 
       // 调用buy合约
@@ -90,15 +82,15 @@ const TokenTrade = () => {
         chainId: CHAIN_ID,
         abi: FollowerPassTokenContract.abi,
         functionName: "sell",
-        args: [LIQUIDITY_POOL_CONTRACT_ADDRESS,BigInt(valueInWei)],
+        args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, BigInt(valueInWei)],
       });
       setTradeButtonLoading(false);
-
+      setAmount(0);
       message.success("Token sell successful");
     } catch (error) {
       setTradeButtonLoading(false);
-
-      console.error("Error sell token:", error);
+      message.error("Error selling token");
+      console.log({ error });
     }
   };
 
