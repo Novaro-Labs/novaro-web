@@ -294,7 +294,7 @@ const TokenPage = () => {
         />
       </div>
       <div className="bg-[#eee] w-full h-[1px] my-8"></div>
-      <div className="grid grid-cols-3 gap-12 ">
+      <div className="grid grid-cols-3 gap-12 pr-8">
         {filterTokens.map((nft) => (
           <TokenCard nft={nft} key={nft.id} />
         ))}

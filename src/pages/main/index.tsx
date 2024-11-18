@@ -1,5 +1,6 @@
 import Sidebar from "@/components/Basic/Sidebar";
 import ConnectWalletButton from "@/components/ConnectWalletButton";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Outlet } from "react-router-dom";
 import { useAccount } from "wagmi";
 import AccountInfo from "./AccountInfo";
@@ -21,6 +22,7 @@ const Main = () => {
         ) : (
           <ConnectWalletButton />
         )}
+        <ScrollToTop />
         <Outlet />
       </div>
     </div>
