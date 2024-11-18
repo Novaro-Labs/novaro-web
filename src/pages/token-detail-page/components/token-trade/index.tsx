@@ -43,7 +43,7 @@ const TokenTrade = () => {
         abi: FollowerPassTokenContract.abi,
         functionName: 'buy',
         args: [ LIQUIDITY_POOL_CONTRACT_ADDRESS, ethers.parseEther(String(amount))],
-        value: ethers.parseEther(String(1))
+        value: ethers.parseEther(String(0.00001))
       })
       console.log('Token purchase successful');
     } catch (error) {
