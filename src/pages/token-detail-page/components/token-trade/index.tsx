@@ -82,7 +82,7 @@ const TokenTrade = () => {
         functionName: "balanceOf",
         args: [address],
       })) as string;
-      console.log("seller balance", sellerBalance);
+      const valueInWei = calTotalCostInWei(amount);
 
       // 调用buy合约
       await writeContractAsync({
@@ -90,7 +90,7 @@ const TokenTrade = () => {
         chainId: CHAIN_ID,
         abi: FollowerPassTokenContract.abi,
         functionName: "sell",
-        args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, parseInt(String(amount))],
+        args: [LIQUIDITY_POOL_CONTRACT_ADDRESS,BigInt(valueInWei)],
       });
       setTradeButtonLoading(false);
 
