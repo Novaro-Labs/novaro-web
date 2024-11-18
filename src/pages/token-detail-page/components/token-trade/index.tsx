@@ -30,12 +30,10 @@ const TokenTrade = () => {
   const tradeEnums = TokenTradeEnum;
   const [title, setTitle] = useState("Buy");
   const [amount, setAmount] = useState(0);
+  const [tradeButtonLoading, setTradeButtonLoading] = useState(false);
+
   const { address } = useAccount();
-  const {
-    data: balanceData,
-    isLoading,
-    isError,
-  } = useBalance({
+  const { data: balanceData } = useBalance({
     address,
   });
 
@@ -46,20 +44,13 @@ const TokenTrade = () => {
 
   // 调用买合约
   const buyAmountContract = async () => {
+    setTradeButtonLoading(true);
     try {
-      // 验证地址有效性
-      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS)) {
-        message.error(
-          "Invalid contract address. Please check your wallet connection"
-        );
-        return;
-      }
       const valueInWei = calTotalCostInWei(amount);
 
-      console.log({ balanceData });
-
-      if ((balanceData?.value||0) < BigInt(valueInWei)) {
+      if ((balanceData?.value || 0) < BigInt(valueInWei)) {
         message.error("Insufficient balance");
+        setTradeButtonLoading(false);
         return;
       }
       // 调用buy合约
@@ -72,18 +63,18 @@ const TokenTrade = () => {
         value: BigInt(valueInWei),
       });
       message.success("Token purchase successful");
+      setTradeButtonLoading(false);
     } catch (error) {
+      setTradeButtonLoading(false);
       console.error("Error buying token:", error);
     }
   };
 
   // 调用sell contract
   const sellAmountContract = async () => {
+    setTradeButtonLoading(true);
+
     try {
-      // 验证地址有效性
-      if (!ethers.isAddress(LIQUIDITY_POOL_CONTRACT_ADDRESS)) {
-        throw new Error("Invalid address");
-      }
       let sellerBalance = (await readContract(config as any, {
         address: FollowerPassTokenAddress,
         chainId: CHAIN_ID,
@@ -101,9 +92,12 @@ const TokenTrade = () => {
         functionName: "sell",
         args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, parseInt(String(amount))],
       });
+      setTradeButtonLoading(false);
 
-      console.log("Token sell successful");
+      message.success("Token sell successful");
     } catch (error) {
+      setTradeButtonLoading(false);
+
       console.error("Error sell token:", error);
     }
   };
@@ -141,6 +135,7 @@ const TokenTrade = () => {
             className="w-full mt-4"
             onClick={title === "Buy" ? buyAmountContract : sellAmountContract}
             disabled={amount === 0}
+            loading={tradeButtonLoading}
           >
             Trade
           </Button>

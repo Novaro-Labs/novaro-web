@@ -1,12 +1,10 @@
 import { DownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, Space } from "antd";
-import { useState } from "react";
 import { useAccount, useDisconnect } from "wagmi";
 
 const AccountInfo = () => {
-  const { address, isConnected } = useAccount();
+  const { address } = useAccount();
   const { disconnect } = useDisconnect();
-  const [hover, setHover] = useState(false);
 
   const signOut = () => {
     // 退出登录
