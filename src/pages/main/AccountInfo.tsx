@@ -30,7 +30,6 @@ const AccountInfo = () => {
       <Button>
         <Space>
           {`${address?.slice(0, 6)}...${address?.slice(-4)}`}
-
           <DownOutlined />
         </Space>
       </Button>

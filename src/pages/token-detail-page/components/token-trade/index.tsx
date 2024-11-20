@@ -1,4 +1,5 @@
 import FollowerPassTokenContract from "@/abi/tokens/FollowerPassToken.json";
+import { getContractAddress } from "@/utils/contract.ts";
 import { Button, message } from "antd";
 import BigNumber from "bignumber.js";
 import { ethers } from "ethers";
@@ -10,10 +11,6 @@ import InputNumber from "../../../../components/Basic/inputNumber/InputNumber.ts
 import { TokenTradeEnum } from "../../../../mock-data/token.ts";
 import "./index.less";
 
-const LIQUIDITY_POOL_CONTRACT_ADDRESS = import.meta.env
-  .VITE_LIQUIDITY_POOL_CONTRACT_ADDRESS;
-
-const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID);
 const MOCK_PRICE = 0.0001;
 
 const calTotalCostInWei = (amount: number) => {
@@ -30,7 +27,7 @@ const TokenTrade = () => {
   const [amount, setAmount] = useState(0);
   const [tradeButtonLoading, setTradeButtonLoading] = useState(false);
 
-  const { address } = useAccount();
+  const { address, chain } = useAccount();
   const { data: balanceData } = useBalance({
     address,
   });
@@ -46,15 +43,23 @@ const TokenTrade = () => {
     try {
       const valueInWei = calTotalCostInWei(amount);
 
+      if (!chain) {
+        message.error("Please connect wallet first");
+        setTradeButtonLoading(false);
+        return;
+      }
+
       if ((balanceData?.value || 0) < BigInt(valueInWei)) {
         message.error("Insufficient balance");
         setTradeButtonLoading(false);
         return;
       }
+      const LIQUIDITY_POOL_CONTRACT_ADDRESS = getContractAddress(chain?.name).LiquidityPool as `0x${string}`;
+
       // 调用buy合约
       await writeContractAsync({
         address: FollowerPassTokenAddress, // 合约地址
-        chainId: CHAIN_ID,
+        chainId: chain.id,
         abi: FollowerPassTokenContract.abi,
         functionName: "buy",
         args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, BigInt(valueInWei)],
@@ -76,10 +81,18 @@ const TokenTrade = () => {
     try {
       const valueInWei = calTotalCostInWei(amount);
 
+      if (!chain) {
+        message.error("Please connect wallet first");
+        setTradeButtonLoading(false);
+        return;
+      }
+
+      const LIQUIDITY_POOL_CONTRACT_ADDRESS = getContractAddress(chain?.name).LiquidityPool as `0x${string}`;
+
       // 调用buy合约
       await writeContractAsync({
         address: FollowerPassTokenAddress, // 合约地址
-        chainId: CHAIN_ID,
+        chainId: chain.id,
         abi: FollowerPassTokenContract.abi,
         functionName: "sell",
         args: [LIQUIDITY_POOL_CONTRACT_ADDRESS, BigInt(valueInWei)],

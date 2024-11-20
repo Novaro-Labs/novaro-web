@@ -12,8 +12,8 @@ import TokenCard from "./TokenCard";
 import clientContract from "../../abi/client/NovaroClient.json";
 import dstContract from "../../abi/tokens/DynamicSocialToken.json";
 
-
 import CreateTokenModal from "@/components/createTokenModal";
+import { BLANK_ADDRESS, getContractAddress } from "@/utils/contract";
 import { confirmPromise } from "@/utils/helpers";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
 import { message } from "antd";
@@ -22,18 +22,8 @@ import { TNft } from "../../types/token-types";
 import { cn } from "../../utils/utils";
 import { config } from "../../wagmi";
 
-const ACCOUNT_FACTORY_CONTRACT_ADDRESS = import.meta.env.VITE_ACCOUNT_FACTORY_CONTRACT_ADDRESS;
-const CLIENT_CONTRACT_ADDRESS = import.meta.env.VITE_CLIENT_CONTRACT_ADDRESS;
-const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID);
-
-const clientCommonParams: any = {
-  address: CLIENT_CONTRACT_ADDRESS,
-  chainId: CHAIN_ID,
-  abi: clientContract.abi,
-};
-
 const TokenPage = () => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const { openConnectModal } = useConnectModal();
 
@@ -44,21 +34,26 @@ const TokenPage = () => {
   const [launchTokenVisible, setLaunchTokenVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
+  const CLIENT_CONTRACT_ADDRESS = getContractAddress(chain?.name || "")
+    .NovaroClient as `0x${string}`;
+
+  const ACCOUNT_FACTORY_CONTRACT_ADDRESS = getContractAddress(
+    chain?.name || ""
+  ).AccountFactory;
+
   /**
    * 获取 bound token account
    */
   const getBoundTokenAccount = async () => {
     const boundTokenAccount =
       ((await readContract(config as any, {
-        ...clientCommonParams,
+        address: CLIENT_CONTRACT_ADDRESS,
+        abi: clientContract.abi,
         functionName: "getBoundAccount",
         args: [address],
       })) as string) || "";
 
-    let account =
-      boundTokenAccount === "0x0000000000000000000000000000000000000000"
-        ? ""
-        : boundTokenAccount;
+    let account = boundTokenAccount === BLANK_ADDRESS ? "" : boundTokenAccount;
     setBoundTokenAccount(account);
     return account;
   };
@@ -68,14 +63,20 @@ const TokenPage = () => {
    */
   const createBoundTokenAccount = async () => {
     try {
+      if (!chain) {
+        message.warning("Please connect wallet first");
+        return;
+      }
       const dynamicSocialTokenAddress = (await readContract(config as any, {
-        ...clientCommonParams,
+        address: CLIENT_CONTRACT_ADDRESS,
+        abi: clientContract.abi,
+        chainId: chain.id,
         functionName: "getDynamicSocialToken",
       })) as `0x${string}`;
 
       let tokenId = (await readContract(config as any, {
         address: dynamicSocialTokenAddress,
-        chainId: CHAIN_ID,
+        chainId: chain.id,
         abi: dstContract.abi,
         functionName: "getDstTokenId",
         args: [address],
@@ -85,28 +86,28 @@ const TokenPage = () => {
       if (!tokenId) {
         await writeContractAsync({
           address: dynamicSocialTokenAddress,
-          chainId: CHAIN_ID,
+          chainId: chain.id,
           abi: dstContract.abi,
           functionName: "mint",
           args: [address, 0],
         });
         tokenId = (await readContract(config as any, {
           address: dynamicSocialTokenAddress,
-          chainId: CHAIN_ID,
+          chainId: chain.id,
           abi: dstContract.abi,
           functionName: "getDstTokenId",
           args: [address],
         })) as string;
       }
-      
+
       const boundTokenAccount = (await writeContractAsync({
         address: CLIENT_CONTRACT_ADDRESS,
-        chainId: CHAIN_ID,
+        chainId: chain.id,
         abi: clientContract.abi,
         functionName: "createOrFetchAccount",
         args: [
           ACCOUNT_FACTORY_CONTRACT_ADDRESS,
-          CHAIN_ID,
+          chain.id,
           dynamicSocialTokenAddress,
           tokenId,
           1,
@@ -171,16 +172,23 @@ const TokenPage = () => {
     tokenDescription: string;
     sourceId: string;
   }) => {
+    if (!chain) {
+      message.warning("Please connect wallet first");
+      return false;
+    }
     setConfirmLoading(true);
+
     try {
       await writeContractAsync({
         address: CLIENT_CONTRACT_ADDRESS,
-        chainId: CHAIN_ID,
+        chainId: chain.id,
         abi: clientContract.abi,
         functionName: "createFollowerPassToken",
         args: [tokenName, tokenSymbol, sourceId, tokenDescription],
       });
-      getTokens();
+      setTimeout(() => {
+        getTokens();
+      }, 2000);
       setLaunchTokenVisible(false);
       setConfirmLoading(false);
       return true;
@@ -206,11 +214,11 @@ const TokenPage = () => {
     if (isConnected && address) {
       getBoundTokenAccount();
     }
-  }, [isConnected]);
+  }, [isConnected, chain?.id]);
 
   useEffect(() => {
-     getTokens();
-  }, []);
+    getTokens();
+  }, [chain?.id]);
 
   const filterTokens =
     searchValue === ""

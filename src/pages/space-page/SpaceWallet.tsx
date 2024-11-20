@@ -1,24 +1,19 @@
 import NovaroImage from "@/components/NovaroImage";
 import { TNft } from "@/types/token-types";
+import { BLANK_ADDRESS, getContractAddress } from "@/utils/contract";
 import { readContract } from "@wagmi/core";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import clientContract from "../../abi/client/NovaroClient.json";
 import { config } from "../../wagmi";
 
-const CLIENT_CONTRACT_ADDRESS = import.meta.env.VITE_CLIENT_CONTRACT_ADDRESS;
-const CHAIN_ID = parseInt(import.meta.env.VITE_CHAIN_ID);
-
-const clientCommonParams: any = {
-  address: CLIENT_CONTRACT_ADDRESS,
-  chainId: CHAIN_ID,
-  abi: clientContract.abi,
-};
-
 export default function SpaceWallet() {
   const [followerPassTokens, setFollowerPassTokens] = useState<TNft[]>([]);
   const [boundTokenAccount, setBoundTokenAccount] = useState("");
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chain } = useAccount();
+
+  const CLIENT_CONTRACT_ADDRESS = getContractAddress(chain?.name || "")
+    .NovaroClient as `0x${string}`;
 
   /**
    * 获取 bound token account
@@ -26,16 +21,15 @@ export default function SpaceWallet() {
   const getBoundTokenAccount = async () => {
     const boundTokenAccount =
       ((await readContract(config as any, {
-        ...clientCommonParams,
+        abi: clientContract.abi,
+        address: CLIENT_CONTRACT_ADDRESS as any,
+        chainId: chain?.id,
         functionName: "getBoundAccount",
         args: [address],
       })) as string) || "";
 
     console.log("boundTokenAccount", address, boundTokenAccount);
-    let account =
-      boundTokenAccount === "0x0000000000000000000000000000000000000000"
-        ? ""
-        : boundTokenAccount;
+    let account = boundTokenAccount === BLANK_ADDRESS ? "" : boundTokenAccount;
     setBoundTokenAccount(account);
     return account;
   };

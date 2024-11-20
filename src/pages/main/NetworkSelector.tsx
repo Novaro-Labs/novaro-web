@@ -1,28 +1,36 @@
 import { Select } from "antd";
-import { useEffect } from "react";
-import { sepolia } from "viem/chains";
 import { useAccount, useSwitchChain } from "wagmi";
 
 const { Option } = Select;
+const supportChains = ["Linea Sepolia Testnet", "Sepolia"];
 
 const NetworkSelector = () => {
   const { chain, isConnected } = useAccount();
   const { chains, switchChain } = useSwitchChain();
 
-  // 强制切换到 Sepolia
-  useEffect(() => {
-    const switchToSepolia = async () => {
-      if (isConnected && chain?.id !== sepolia.id) {
-        try {
-          await switchChain({ chainId: sepolia.id });
-        } catch (error) {
-          console.error("Failed to switch network:", error);
-        }
-      }
-    };
+  const defaultChains = chains.filter((chain) =>
+    supportChains.includes(chain.name)
+  );
 
-    switchToSepolia();
-  }, [isConnected]);
+  const defaultChainId = chains.find(
+    (chain) => chain.name === "Linea Sepolia Testnet"
+  )!.id;
+
+  // // 强制切换到 Sepolia
+  // useEffect(() => {
+  //   const switchToSepolia = async () => {
+  //     console.log(chain)
+  //     if (isConnected && chain?.id !== defaultChainId) {
+  //       try {
+  //         await switchChain({ chainId: defaultChainId });
+  //       } catch (error) {
+  //         console.error("Failed to switch network:", error);
+  //       }
+  //     }
+  //   };
+
+  //   switchToSepolia();
+  // }, [isConnected]);
 
   return (
     <div style={{ position: "relative" }}>
@@ -31,7 +39,7 @@ const NetworkSelector = () => {
         onChange={(v) => switchChain?.({ chainId: Number(v) })}
         popupMatchSelectWidth={false}
       >
-        {chains.map((c) => (
+        {defaultChains.map((c) => (
           <Option key={c.id} value={c.id}>
             {c.name}
           </Option>

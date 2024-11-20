@@ -1,9 +1,8 @@
 import { postUploadImages } from "@/api/asset-apis.ts";
 import Star from "@/assets/svg/star.svg";
 import UploadImage from "@/assets/svg/upload.svg";
-import NovButton from "@/components/Basic/Button/NovButton.tsx";
 import type { GetProp, UploadProps } from "antd";
-import { Input, Modal, Upload, message } from "antd";
+import { Button, Input, Modal, Upload, message } from "antd";
 import { useState } from "react";
 import "./index.less";
 
@@ -33,6 +32,7 @@ const CreateTokenModal = ({
   const [tokenDescription, setDescription] = useState("");
   const [sourceId, setSourceId] = useState<string>();
   const [imageFileList, setImageFileList] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
 
   // limit file type and size less than 4MB
   const beforeUpload = (file: FileType) => {
@@ -79,7 +79,7 @@ const CreateTokenModal = ({
     </button>
   );
 
-  const lanuchToken = async () => {
+  const launchToken = async () => {
     console.log("img", imageFileList);
     if (!sourceId) {
       message.error("Please upload an image");
@@ -93,6 +93,7 @@ const CreateTokenModal = ({
       message.error("Please enter token symbol");
       return;
     }
+    setLoading(true);
     try {
       const result = await onLaunch({
         tokenName,
@@ -107,7 +108,9 @@ const CreateTokenModal = ({
         setTokenSymbol("");
         setDescription("");
       }
+      setLoading(false);
     } catch (err) {
+      setLoading(false);
       message.error("Error creating token");
     }
   };
@@ -200,7 +203,15 @@ const CreateTokenModal = ({
           </div>
         </div>
         <div className="footer">
-          <NovButton text="Launch" width="180px" onClick={lanuchToken} />
+          <Button
+            onClick={launchToken}
+            type="primary"
+            size="large"
+            loading={loading}
+            className="w-[180px]"
+          >
+            Launch
+          </Button>
         </div>
         <div className="footer footer-text">Cost To Deploy 20 TRX</div>
       </Modal>

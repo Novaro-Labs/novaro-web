@@ -14,39 +14,39 @@ export default function SpaceMintPoints({
   const [isAnimating, setIsAnimating] = useState(false);
 
   const element1Spring = useSpring({
-    from: { left: "300px", top: "60px" },
+    from: { left: "30%", top: "60px" },
     to: async (next) => {
       if (!isAnimating) return;
-      await next({ left: "450px", top: "160px" });
+      await next({ left: "50%", top: "160px" });
     },
-    config: { duration: 500 + Math.random() * 1500 },
+    config: { duration: 500 + Math.random() * 1000 },
   });
 
   const element2Spring = useSpring({
-    from: { left: "400px", top: "20px" },
+    from: { left: "42%", top: "40px" },
     to: async (next) => {
       if (!isAnimating) return;
-      await next({ left: "450px", top: "160px" });
+      await next({ left: "50%", top: "160px" });
     },
-    config: { duration: 500 + Math.random() * 1500 },
+    config: { duration: 500 + Math.random() * 1000 },
   });
 
   const element3Spring = useSpring({
-    from: { left: "500px", top: "20px" },
+    from: { left: "54%", top: "10px" },
     to: async (next) => {
       if (!isAnimating) return;
-      await next({ left: "450px", top: "160px" });
+      await next({ left: "50%", top: "160px" });
     },
-    config: { duration: 500 + Math.random() * 1500 },
+    config: { duration: 500 + Math.random() * 900 },
   });
 
   const element4Spring = useSpring({
-    from: { left: "600px", top: "60px" },
+    from: { left: "64%", top: "60px" },
     to: async (next) => {
       if (!isAnimating) return;
-      await next({ left: "450px", top: "160px" });
+      await next({ left: "50%", top: "160px" });
     },
-    config: { duration: 500 + Math.random() * 1500 },
+    config: { duration: 500 + Math.random() * 1000 },
   });
 
   const startAnimation = () => {

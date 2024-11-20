@@ -8,7 +8,7 @@ import "./index.less";
 import NetworkSelector from "./NetworkSelector";
 
 const Main = () => {
-  const { address, isConnected } = useAccount();
+  const { isConnected } = useAccount();
 
   return (
     <div className="main-container">
@@ -20,7 +20,9 @@ const Main = () => {
             <AccountInfo />
           </div>
         ) : (
-          <ConnectWalletButton />
+          <div className="flex items-center pr-9 py-3 justify-end gap-1">
+            <ConnectWalletButton className="bg-[#030305] px-8 text-white h-10 font-bold" />
+          </div>
         )}
         <ScrollToTop />
         <Outlet />

@@ -2,6 +2,8 @@ import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import {
   arbitrum,
   base,
+  linea,
+  lineaSepolia,
   localhost,
   mainnet,
   optimism,
@@ -12,5 +14,15 @@ import {
 export const config = getDefaultConfig({
   appName: "navaro-web",
   projectId: "navaro-web",
-  chains: [mainnet, polygon, optimism, arbitrum, base, localhost, sepolia],
+  chains: [
+    mainnet,
+    linea,
+    lineaSepolia,
+    sepolia,
+    polygon,
+    optimism,
+    arbitrum,
+    base,
+    localhost,
+  ],
 });
