@@ -82,7 +82,8 @@ const LandingPage = () => {
      */
     const invitationCode = codes.join("");
     try {
-      const res = await authX({ invitationCode });
+      await authX({ invitationCode });
+      window.location.href = `${baseUrl}/v1/auth/login?code=${invitationCode}`;
     } catch (error: any) {
       if (!error.status) {
         window.location.href = `${baseUrl}/v1/auth/login?code=${invitationCode}`;
