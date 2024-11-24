@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
+import { authX } from "@/api/auth-apis";
 import bottomKV from "@/assets/landing-page/bottomKV.png";
 import Discord from "@/assets/landing-page/Discord.png";
 import logo from "@/assets/landing-page/logo.png";
@@ -69,7 +70,7 @@ const LandingPage = () => {
     }
   };
 
-  const loginWithX = () => {
+  const loginWithX = async () => {
     if (codes.join("").length < CODES_LENGTH) {
       message.warning("Please input invitation code");
       return;
@@ -78,7 +79,14 @@ const LandingPage = () => {
      * https://novaro-web-demo.vercel.app/auth/x/callback?state=Ky5XeUViuf0bgtRYVoXtqFf4ZmvMbK9voEO9gvqski0%3D&code=RHFMd0RsenlEUEU2WFhoRUxDZXkwcDFCVVlUV1RsWi1TVWI4T3oyeUdWVjhVOjE3MzA3ODk4MjcyMTM6MTowOmFjOjE
      * redirect to auth/x/callback
      */
-    window.location.href = `${baseUrl}/v1/auth/login?code=${codes.join("")}`;
+    const code = codes.join("");
+    try {
+      const res = await authX({ invitationCode: code });
+      console.log(res)
+    } catch (error: any) {
+      console.log(error);
+      message.warning(error.message);
+    }
   };
 
   const handleInvationCodePaste = (

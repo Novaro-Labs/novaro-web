@@ -6,6 +6,6 @@ export const authX = ({
   invitationCode: string;
 }): Promise<any> =>
   request.get("/v1/auth/login", {
-    params: { icode: invitationCode },
+    params: { code: invitationCode },
     maxRedirects: 0,
   });
