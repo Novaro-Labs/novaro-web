@@ -1,7 +1,9 @@
+import localhostAddresses from "@/contracts/hardhat_addresses.json";
 import LineaSepoliaAddresses from "@/contracts/linea_sepolia_addresses.json";
 import SepoliaAddresses from "@/contracts/sepolia_addresses.json";
 import {
   lineaSepolia,
+  localhost,
   sepolia
 } from "wagmi/chains";
 
@@ -20,6 +22,8 @@ export const getContractAddress = (
     return SepoliaAddresses.contracts;
   } else if (chainName === lineaSepolia.name) {
     return LineaSepoliaAddresses.contracts;
+  } else if (chainName === localhost.name) {
+    return localhostAddresses.contracts;
   } else {
     return {
       LiquidityPool: BLANK_ADDRESS,

@@ -6,7 +6,13 @@ import SpaceMintPoints from "./SpaceMintPoints";
 
 const CUR_LEVEL_TARGET = 300;
 
-export default function SpaceMintPanel({ score,onMintScoreChange }: { score: number,onMintScoreChange: (score: number) => void }) {
+export default function SpaceMintPanel({
+  score,
+  onMintScoreChange,
+}: {
+  score: number;
+  onMintScoreChange: (score: number) => Promise<boolean>;
+}) {
   return (
     <div className="nft relative">
       <div className="absolute inset-0">

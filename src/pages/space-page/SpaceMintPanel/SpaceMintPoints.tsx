@@ -1,6 +1,7 @@
 import MintPanelStarHalo from "@/assets/space-page/space-mint-star-halo.png";
 import MintPanelStarPoint from "@/assets/space-page/space-mint-star-point.png";
 import MintPanelStar from "@/assets/space-page/space-mint-star.png";
+import { Button } from "antd";
 import { useState } from "react";
 import { animated, useSpring } from "react-spring";
 
@@ -9,9 +10,10 @@ export default function SpaceMintPoints({
   score,
 }: {
   score: number;
-  onMint: (score: number) => void;
+  onMint: (score: number) => Promise<boolean>;
 }) {
   const [isAnimating, setIsAnimating] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const element1Spring = useSpring({
     from: { left: "30%", top: "60px" },
@@ -49,9 +51,13 @@ export default function SpaceMintPoints({
     config: { duration: 500 + Math.random() * 1000 },
   });
 
-  const startAnimation = () => {
-    setIsAnimating(true);
-    onMint(score + 4);
+  const startAnimation = async () => {
+    setLoading(true);
+    const result = await onMint(score + 4);
+    if (result) {
+      setIsAnimating(true);
+    }
+    setLoading(false);
   };
 
   return (
@@ -64,7 +70,11 @@ export default function SpaceMintPoints({
         src={MintPanelStar}
         className="absolute z-[1] w-[304px] h-[304px] left-1/2 bottom-10 -translate-x-1/2"
       />
-      <button className="active-btn" onClick={startAnimation}></button>
+      <Button
+        className="active-btn"
+        loading={loading}
+        onClick={startAnimation}
+      ></Button>
       <animated.div className="space-y-2 absolute" style={element1Spring}>
         <div className="text-[#FFCE42] text-sm">
           {300 + Math.floor(Math.random() * 300)}
