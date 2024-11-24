@@ -53,6 +53,7 @@ const LandingPage = () => {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>, index: number) => {
     const { value } = e.target;
+    console.log({ value, index });
     if (/^\d$/.test(value) || value === "") {
       const newValues = [...codes];
       newValues[index] = value;
@@ -79,17 +80,22 @@ const LandingPage = () => {
      * https://novaro-web-demo.vercel.app/auth/x/callback?state=Ky5XeUViuf0bgtRYVoXtqFf4ZmvMbK9voEO9gvqski0%3D&code=RHFMd0RsenlEUEU2WFhoRUxDZXkwcDFCVVlUV1RsWi1TVWI4T3oyeUdWVjhVOjE3MzA3ODk4MjcyMTM6MTowOmFjOjE
      * redirect to auth/x/callback
      */
-    const code = codes.join("");
+    const invitationCode = codes.join("");
     try {
-      const res = await authX({ invitationCode: code });
-      console.log(res)
+      const res = await authX({ invitationCode });
     } catch (error: any) {
-      console.log(error);
-      message.warning(error.message);
+      if (!error.status) {
+        window.location.href = `${baseUrl}/v1/auth/login?code=${invitationCode}`;
+      } else {
+        console.log(error);
+        message.warning(
+          error?.response?.data?.error || "Invalid invitation code"
+        );
+      }
     }
   };
 
-  const handleInvationCodePaste = (
+  const handleInvitationCodePaste = (
     e: React.ClipboardEvent<HTMLInputElement>
   ) => {
     e.preventDefault();
@@ -139,7 +145,7 @@ const LandingPage = () => {
                       ref={(el: HTMLInputElement) =>
                         (inputsRef.current[index] = el)
                       }
-                      onPaste={handleInvationCodePaste}
+                      onPaste={handleInvitationCodePaste}
                       type="text"
                       className="code_input"
                       value={value}

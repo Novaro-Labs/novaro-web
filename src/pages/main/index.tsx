@@ -13,7 +13,7 @@ const Main = () => {
   return (
     <div className="main-container">
       <Sidebar />
-      <div className="flex-1 bg-white ">
+      <div className="flex-1 bg-white w-0">
         {isConnected ? (
           <div className="flex items-center pr-9 py-3 justify-end mb-3 gap-1">
             <NetworkSelector />
