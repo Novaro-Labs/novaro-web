@@ -78,21 +78,19 @@ const LandingPage = () => {
     }
     /**
      * https://novaro-web-demo.vercel.app/auth/x/callback?state=Ky5XeUViuf0bgtRYVoXtqFf4ZmvMbK9voEO9gvqski0%3D&code=RHFMd0RsenlEUEU2WFhoRUxDZXkwcDFCVVlUV1RsWi1TVWI4T3oyeUdWVjhVOjE3MzA3ODk4MjcyMTM6MTowOmFjOjE
+     * https://twitter.com/i/oauth2/authorize?client_id=V19YdlA5VnBybXNTVHlCQXdYRFQ6MTpjaQ&code_challenge=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3D&code_challenge_method=plain&redirect_uri=https%3A%2F%2Fnovaro-web-demo.vercel.app%2Fauth%2Fx%2Fcallback&response_type=code&scope=tweet.read%2Busers.read%2Bfollows.read%2Boffline.access&state=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3D
      * redirect to auth/x/callback
      */
     const invitationCode = codes.join("");
     try {
       await authX({ invitationCode });
-      window.location.href = `${baseUrl}/v1/auth/login?code=${invitationCode}`;
+      message.success("Login success, redirecting...");
+      window.location.href =
+        "https://twitter.com/i/oauth2/authorize?client_id=V19YdlA5VnBybXNTVHlCQXdYRFQ6MTpjaQ&code_challenge=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3D&code_challenge_method=plain&redirect_uri=https%3A%2F%2Fnovaro-web-demo.vercel.app%2Fauth%2Fx%2Fcallback&response_type=code&scope=tweet.read%2Busers.read%2Bfollows.read%2Boffline.access&state=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3DF";
     } catch (error: any) {
-      if (!error.status) {
-        window.location.href = `${baseUrl}/v1/auth/login?code=${invitationCode}`;
-      } else {
-        console.log(error);
-        message.warning(
-          error?.response?.data?.error || "Invalid invitation code"
-        );
-      }
+      message.warning(
+        error?.response?.data?.error || "Invalid invitation code"
+      );
     }
   };
 
