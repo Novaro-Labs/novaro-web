@@ -234,9 +234,9 @@ const TokenPage = () => {
       <div className="flex gap-20">
         <div className="space-y-8">
           <img src={logo} className="h-6 w-auto" />
-          <div className="text-2xl font-extrabold">
+{/*           <div className="text-2xl font-extrabold">
             Create Your Own Token, Attract More Followers
-          </div>
+          </div> */}
 
           {!isConnected ? (
             openConnectModal && (
