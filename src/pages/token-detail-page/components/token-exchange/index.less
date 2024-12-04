@@ -1,0 +1,117 @@
+
+  
+.exchange-section {
+    margin-bottom: 16px;
+  
+    .input-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+  
+      .input-details {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+  
+        .label {
+          font-size: 14px;
+          font-weight: 600;
+          color: #6b7280;
+        }
+  
+        .amount {
+          font-size: 20px;
+          font-weight: bold;
+          color: #111827;
+          margin: 8px 0;
+          border: none;
+          background: transparent;
+          outline: none;
+          text-align: left;
+        }
+  
+        .subtext {
+          font-size: 12px;
+          color: #9ca3af;
+        }
+      }
+  
+      .currency-container {
+        display: flex;
+        align-items: center;
+  
+        .currency {
+          .token-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 4px 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  
+            img {
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+            }
+  
+            select {
+              border: none;
+              background: transparent;
+              font-size: 14px;
+              color: #111827;
+              cursor: pointer;
+  
+              &:focus {
+                outline: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  
+  
+    .arrow-icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40px;
+      height: 40px;
+      position: absolute;
+      left: 84.5%;
+      top: 71%;
+      width: 50px;
+      height: 50px;
+      transform: translate(-50%, -50%);
+      border: 1px solid #e5e7eb;
+      background-color: #ffffff;
+      z-index: 1;
+      border-radius: 20%;
+      font-size: 40px;
+      color: #111827;
+    }
+  
+  .exchange-button {
+    width: 100%;
+    padding: 12px;
+    background: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  
+    &:hover {
+      background-color: #1d4ed8;
+    }
+  }
+  
