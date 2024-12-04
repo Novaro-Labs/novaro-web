@@ -7,6 +7,7 @@ import TokenEcharts from "./components/token-echats";
 import TokenTrade from "./components/token-trade";
 import TokenRateTable from "./components/token-rateTable";
 import TokenCommunity from "./components/token-community";
+import TokenExchange from "./components/token-exchange";
 import { TokenDollarEnum, TokenTimeEnum } from "../../mock-data/token";
 
 const TokenDetailPage = () => {
@@ -49,6 +50,9 @@ const TokenDetailPage = () => {
         <div className="w-2/6">
           <div className="bg-white rounded-lg">
             <TokenTrade />
+          </div>
+          <div>
+            <TokenExchange />
           </div>
           <div className="my-8">
             <TokenCommunity />
