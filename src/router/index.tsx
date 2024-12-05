@@ -6,8 +6,8 @@ import ProfilePage from "@/pages/profile-page";
 import SpacePage from "@/pages/space-page";
 import TokenDetailPage from "@/pages/token-detail-page";
 import TokenPage from "@/pages/token-page";
+import CommunityPage from "@/pages/community-page";
 import { createBrowserRouter, Navigate } from "react-router-dom";
-
 import NotFound from "@/components/NotFound";
 import CryptosPage from "@/pages/cryptos-page";
 import { ReactNode } from "react";
@@ -39,7 +39,7 @@ const routes = [
   },
   {
     path: "/",
-    element: <Main />,
+    element: <PrivateRoute element={<Main />} />,
     children: [
       {
         path: "/",
@@ -47,27 +47,31 @@ const routes = [
       },
       {
         path: "home",
-        element: <PrivateRoute element={<HomePage />} />,
-      },
-      {
-        path: "profile",
-        element: <PrivateRoute element={<ProfilePage />} />,
+        element: <HomePage />,
       },
       {
         path: "space",
-        element: <PrivateRoute element={<SpacePage />} />,
+        element: <SpacePage />,
       },
       {
         path: "token",
-        element: <PrivateRoute element={<TokenPage />} />,
+        element: <TokenPage />,
       },
       {
-        path: "token-detail/:followerPassToken",
-        element: <PrivateRoute element={<TokenDetailPage />} />,
+        path: "token/:tokenId",
+        element: <TokenDetailPage />,
+      },
+      {
+        path: "profile",
+        element: <ProfilePage />,
       },
       {
         path: "cryptos",
-        element: <PrivateRoute element={<CryptosPage />} />,
+        element: <CryptosPage />,
+      },
+      {
+        path: "community",
+        element: <CommunityPage />,
       },
     ],
   },
@@ -76,6 +80,5 @@ const routes = [
     element: <NotFound />,
   },
 ];
-// if wallet is not connected, redirect to login page
 
 export default createBrowserRouter(routes);

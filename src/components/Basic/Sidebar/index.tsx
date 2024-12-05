@@ -8,6 +8,8 @@ import SpaceActiveIcon from "@/assets/common/space-active-icon.svg";
 import SpaceIcon from "@/assets/common/space-icon.svg";
 import TokenActiveIcon from "@/assets/common/token-active-icon.png";
 import TokenIcon from "@/assets/common/token-icon.png";
+import CommunityActiveIcon from "@/assets/common/community-active-icon.svg";
+import CommunityIcon from "@/assets/common/community-icon.svg";
 import logo from "@/assets/svg/logo.svg";
 import { NavLink } from "react-router-dom";
 import "./index.less";
@@ -30,6 +32,11 @@ const MENU_DICT: Record<
     icon: TokenIcon,
     activeIcon: TokenActiveIcon,
     title: "Token",
+  },
+  community: {
+    icon: CommunityIcon,
+    activeIcon: CommunityActiveIcon,
+    title: "Community",
   },
   profile: {
     icon: ProfileIcon,
@@ -72,8 +79,8 @@ const NavLinkItem = ({ to, label }: NavLinkItemProps) => {
     </li>
   );
 };
-const Sidebar = () => {
 
+const Sidebar = () => {
   return (
     <div className="sidebar sticky top-0 flex flex-col pt-10 py-20 items-center">
       <div className="flex-1">
@@ -85,6 +92,7 @@ const Sidebar = () => {
             <NavLinkItem to="/home" label="Home" />
             <NavLinkItem to="/space" label="Space" />
             <NavLinkItem to="/token" label="Token" />
+            <NavLinkItem to="/community" label="Community" />
             <NavLinkItem to="/cryptos" label="Cryptos" />
             <NavLinkItem to="/profile" label="Profile" />
           </ul>
