@@ -9,6 +9,7 @@ import {
   optimism,
   polygon,
   sepolia,
+  hardhat,
 } from "wagmi/chains";
 
 export const config = getDefaultConfig({
@@ -24,5 +25,6 @@ export const config = getDefaultConfig({
     arbitrum,
     base,
     localhost,
+    hardhat,
   ],
 });
