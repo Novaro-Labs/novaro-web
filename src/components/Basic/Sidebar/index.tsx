@@ -31,6 +31,11 @@ const MENU_DICT: Record<
     activeIcon: TokenActiveIcon,
     title: "Token",
   },
+  community: {
+    icon: CommunityIcon,
+    activeIcon: CommunityActiveIcon,
+    title: "Community",
+  },
   profile: {
     icon: ProfileIcon,
     activeIcon: ProfileActiveIcon,
@@ -85,6 +90,7 @@ const Sidebar = () => {
             <NavLinkItem to="/home" label="Home" />
             <NavLinkItem to="/space" label="Space" />
             <NavLinkItem to="/token" label="Token" />
+            <NavLinkItem to="/community" label="Community" />
             <NavLinkItem to="/cryptos" label="Cryptos" />
             <NavLinkItem to="/profile" label="Profile" />
           </ul>
