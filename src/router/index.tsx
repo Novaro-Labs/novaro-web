@@ -69,6 +69,10 @@ const routes = [
         path: "cryptos",
         element: <PrivateRoute element={<CryptosPage />} />,
       },
+      {
+        path: "community",
+        element: <PrivateRoute element={<CommunityPage />} />,
+      },
     ],
   },
   {
