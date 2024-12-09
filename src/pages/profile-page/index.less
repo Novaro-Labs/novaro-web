@@ -1,0 +1,89 @@
+.profile-container{
+  display: flex;
+  background: #FFFFFF;
+  .profile-left {
+    padding: 36px 31px;
+    width: 1220px;
+    border-right: 1px solid #EDEDED;
+  }
+  .profile-right{
+    padding: 36px;
+    .profile-right-title{
+      font-size: 20px;
+      color: #202226;
+      margin-bottom: 24px;
+    }
+  }
+}
+.top{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 50px;
+  .top-left{
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    color: #000000;
+    img{
+      margin-right: 12px;
+    }
+  }
+}
+.user{
+  padding: 20px;
+  .user-info{
+    display: flex;
+    justify-content: space-between;
+    .avatar-username{
+      display: flex;
+      .user-text{
+        margin-left: 12px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .username{
+          color: #202226;
+          font-size: 16px;
+          font-weight: bold;
+        }
+        .user-id{
+          color: #838383;
+          font-size: 12px;
+        }
+      }
+    } // DIN Alternate
+    .user-operate{
+      display: flex;
+      .more-btn{
+        margin-left: 16px;
+      }
+    }
+  }
+  .follow-status{
+    margin: 36px 0;
+    display: flex;
+    .follow-item {
+      display: flex;
+      line-height: 24px;
+      &:first-child{
+        margin-right: 82px;
+      }
+      .num{
+        font-size: 24px;
+        font-weight: bolder;
+        color: #202226;
+        margin-right: 2px;
+      }
+      .text{
+        font-size: 14px;
+        color: #BFBFCA;
+      }
+    }
+  }
+  .empty{
+    padding-top: 36px;
+  }
+
+}

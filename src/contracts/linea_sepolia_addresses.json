@@ -1,0 +1,12 @@
+{
+  "network": "linea_sepolia",
+  "feeder": "0x2f14fA56099938322B0f9Bf8D38f3DD39aCbc6c4",
+  "env": "sepolia",
+  "contracts": {
+    "LiquidityPool": "0x6FB1474AB337A201D6fD3f6A6076078342d2F117",
+    "DynamicSocialToken": "0x350eF4392b37CBCE7e133d32f56d3C2D1AA41455",
+    "NovaroClient": "0x2f14fA56099938322B0f9Bf8D38f3DD39aCbc6c4",
+    "AccountFactory": "0xBdebbefFD4a65D4D2C1912eA396597CB8EeE28E3",
+    "AccountRegistry": "0x15fb7B4977FCAC7eE11a5b3e1418c2Be8d07EBbC"
+  }
+}

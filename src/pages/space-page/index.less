@@ -1,0 +1,407 @@
+.space-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+
+    .space-content {
+        margin-left: 32px;
+        margin-right: 48px;
+        width: 1209px;
+
+        .search {
+            margin-top: 36px;
+            margin-bottom: 44px;
+            height: 44px;
+        }
+
+        .nft {
+            width: 1209px;
+            height: 453px;
+            border-radius: 16px;
+            position: relative;
+            background-color: #ccc;
+
+            .progress {
+                position: absolute;
+                left: 28px;
+                top: 36px;
+                width: 200px;
+                height: 12px;
+                border-radius: 6px;
+                background-color: aqua;
+            }
+
+            .grade {
+                width: fit-content;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding-left: 8px;
+                padding-right: 17px;
+                height: 36px;
+                background-color: rgba(0, 0, 0, 0.2);
+                border-radius: 4px;
+
+                .level-icon {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .level-text {
+                    margin-left: 8px;
+                    margin-right: 10px;
+                    font-size: 10px;
+                    color: #fff;
+                }
+
+                .gap-line {
+                    margin-right: 12px;
+                    height: 20px;
+                    width: 0.5px;
+                    background-color: #fff;
+                }
+
+                .rock-icon {
+                    width: 24px;
+                    height: 24px;
+                }
+
+                .rock-text {
+                    font-size: 10px;
+                    color: #fff;
+                    margin-left: 12px;
+                    margin-right: 8px;
+                }
+            }
+
+            .active-btn {
+                position: absolute;
+                right: 36px;
+                bottom: 36px;
+                width: 124px;
+                height: 48px;
+                background: url('@/assets/space-page/active-btn.png') no-repeat;
+                background-size: 100% 100%;
+            }
+
+            .active-btn:hover {
+                opacity: 0.85;
+            }
+        }
+
+        .data {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 248px;
+            margin-top: 36px;
+
+            .mint-value {
+                width: 372px;
+                height: 248px;
+                border-radius: 16px;
+                background-color: #F9F9FC;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .mint-text {
+                    font-weight: 500;
+                    color: #202226;
+                    height: 20px;
+                    font-size: 20px;
+                    margin-top: 24px;
+                }
+
+                .mint-count {
+                    font-weight: 700;
+                    font-size: 76px;
+                    margin-top: 50px;
+                    background: linear-gradient(to right, #59ECC5, #FFCE42);
+                    /* 渐变背景色 */
+                    background-clip: text;
+                    /* 将背景剪裁到文本区域 */
+                    color: transparent;
+                    /* 文字颜色设为透明 */
+                    -webkit-text-fill-color: transparent;
+                    /* 文字填充颜色设为透明（适用于 Webkit） */
+                }
+            }
+
+            .statistics {
+                width: 808px;
+                height: 248px;
+                border-radius: 16px;
+                background-color: #F9F9FC;
+                display: flex;
+                flex-direction: column;
+
+                .statistic-header {
+                    margin-top: 16px;
+                    margin-left: 36px;
+                    margin-right: 36px;
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-between;
+                    height: 24px;
+
+                    .header-text {
+                        font-weight: 500;
+                        color: #202226;
+                        height: 20px;
+                        font-size: 20px;
+                    }
+                }
+            }
+        }
+
+        .activity-record {
+            width: 1209px;
+            height: 706px;
+            padding-top: 24px;
+            padding-left: 24px;
+            padding-right: 24px;
+            margin-top: 36px;
+
+            .record-title {
+                font-weight: 500;
+                font-size: 20px;
+                color: #202226;
+                height: 20px;
+                line-height: 20px;
+            }
+
+            .table-header {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 24px;
+                margin-top: 37px;
+                font-weight: 500;
+                font-size: 14px;
+                color: #bbb;
+                line-height: 24px;
+
+                .table-activity {
+                    margin-left: 24px;
+                    width: 544px;
+                }
+
+                .table-points {
+                    width: 480px;
+                }
+            }
+
+            .table-item {
+                display: flex;
+                margin-top: 24px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                background-color: #F9F9FC;
+
+                .item-activity {
+                    margin-left: 24px;
+                    width: 544px;
+                    color: #202226;
+                    font-size: 14px;
+                    font-weight: 500;
+                    height: 24px;
+                    line-height: 24px;
+                }
+
+                .item-point {
+                    width: 480px;
+                    font-weight: 500;
+                    font-size: 16px;
+                    height: 24px;
+                    line-height: 24px;
+                }
+
+                .item-point-got {
+                    color: #2DB83B;
+                }
+
+                .item-point-use {
+                    color: #C3492F;
+                }
+
+                .item-data {
+                    font-weight: 500;
+                    color: #202226;
+                    font-size: 14px;
+                    height: 24px;
+                    line-height: 24px;
+                }
+            }
+        }
+    }
+
+    .profile {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+        .edit {
+            position: absolute;
+            top: 58px;
+            right: 41px;
+            width: 24px;
+            height: 24px;
+            background: url('@/assets/common/edit.png') no-repeat;
+            background-size: 100% 100%;
+        }
+        .avatar-img {
+            margin-top: 132px;
+            width: 120px;
+            height: 120px;
+            border-radius: 60px;
+            background-color: #ccc;
+        }
+        .user-name {
+            margin-top: 16px;
+            font-size: 16px;
+            height: 24px;
+            line-height: 24px;
+            color: #202226;
+        }
+        .user-acount {
+            margin-top: 4px;
+            font-size: 10px;
+            color: #BFBFCA;
+            height: 12px;
+            line-height: 12px;
+        }
+        .user-data {
+            margin-top: 32px;
+            width: 367px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            height: 46px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 46px;
+            .info-count{
+                font-weight: 700;
+                font-size: 24px;
+                color: #202226;
+                height: 28px;
+                line-height: 28px;
+            }
+            .info-text{
+                margin-top: 4px;
+                color: #BFBFCA;
+                font-size: 12px;
+                height: 14px;
+                line-height: 14px;
+            }
+        }
+        .invitation {
+            width: 395px;
+            height: 60px;
+            border-radius: 8px;
+            background-color: #F9F9FC;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 32px;
+            .invitation-code {
+                margin-left: 16px;
+                color: #202226;
+                font-weight: 700;
+                font-size: 24px;
+            }
+            .invitation-text {
+                margin-left: 12px;
+                font-size: 12px;
+                color: #BFBFCA;
+                height: 14px;
+                line-height: 14px;
+            }
+            .invitation-copy {
+                margin-left: auto;
+                margin-right: 16px;
+                width: 24px;
+                height: 24px;
+                background: url('@/assets/common/copy.png') no-repeat;
+                background-size: 100% 100%;
+            }
+        }
+        .dst-account-title {
+            margin-left: 32px;
+            align-self: flex-start;
+            margin-top: 60px;
+            color: #202226;
+            font-weight: 500;
+            font-size: 20px;
+            height: 24px;
+            line-height: 24px;
+        }
+        .dst-account-address {
+            margin-left: 32px;
+            align-self: flex-start;
+            margin-top: 12px;
+            font-size: 16px;
+            color: #202226;
+        }
+        .wallet {
+            margin-top: 60px;
+            width: 395px;
+            .wallet-title {
+                font-weight: 500;
+                font-size: 20px;
+                height: 20px;
+                line-height: 20px;
+                color: #202226;
+            }
+            .wallet-info {
+                margin-top: 24px;
+                width: 100%;
+                height: 80px;
+            }
+        }
+        .tokens {
+            margin-top: 24px;
+            background-color: #F9F9FC;
+            width: 395px;
+            padding-top: 12px;
+            padding-bottom: 12px;
+            border-radius: 8px;
+            .tokens-title {
+                margin-left: 16px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                height: 24px;
+                .token-icon {
+                    height: 24px;
+                    width: 24px;
+                    background: url('@/assets/space-page/token-icon.png') no-repeat;
+                    background-size: 100% 100%;
+                }
+                .token-text {
+                    margin-left: 12px;
+                    font-size: 20px;
+                    height: 24px;
+                    line-height: 24px;
+                    font-weight: 500;
+                    color: #202226;
+                }
+                .token-count {
+                    margin-left: 12px;
+                    color: #BFBFCA;
+                    font-size: 12px;
+                    height: 14px;
+                    line-height: 14px;
+                }
+            }
+        }
+    }
+}
