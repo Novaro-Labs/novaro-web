@@ -2,7 +2,7 @@ import { Select } from "antd";
 import { useAccount, useSwitchChain } from "wagmi";
 
 const { Option } = Select;
-const supportChains = ["Linea Sepolia Testnet", "Sepolia"];
+const supportChains = ["Binance Smart Chain Testnet", "Linea Sepolia Testnet"];
 
 const NetworkSelector = () => {
   const { chain, isConnected } = useAccount();
@@ -12,9 +12,9 @@ const NetworkSelector = () => {
     supportChains.includes(chain.name)
   );
 
-  const defaultChainId = chains.find(
-    (chain) => chain.name === "Linea Sepolia Testnet"
-  )!.id;
+  // const defaultChainId = chains.find(
+  //   (chain) => chain.name === "Linea Sepolia Testnet"
+  // )!.id;
 
   // // 强制切换到 Sepolia
   // useEffect(() => {

@@ -1,0 +1,13 @@
+{
+  "network": "bsctestnet",
+  "feeder": "0x450D34B3a7402A5e9B76930110280b6BAec6f36C",
+  "contracts": {
+    "MockLiquidityPool": "0xd67c2c140993FAb17fEB0E6b0B62Edc0045d7e20",
+    "MockSocialOracle": "0xbd531bFfa33d5BCcE8E93c3A8D65d04ba317E707",
+    "DynamicSocialToken": "0x85D1fEb4696b2081DFDe520eb1007cBd0d0C8193",
+    "NovaroClient": "0x450D34B3a7402A5e9B76930110280b6BAec6f36C",
+    "TokenAddressProvider": "0xb0BCEC6413Df784B667539c55Cb96639A01857D3",
+    "AccountFactory": "0x0619D818Aa49e364dcfd07127dD703C7141788d2",
+    "AccountRegistry": "0xc86669d83D88189a3e4Be33898BF707b0781f471"
+  }
+}

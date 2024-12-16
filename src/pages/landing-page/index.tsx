@@ -84,10 +84,12 @@ const LandingPage = () => {
     const invitationCode = codes.join("");
     try {
       await authX({ invitationCode });
-      message.success("Login success, redirecting...");
+      message.success("Invitation code valid successfully, redirecting...");
+      localStorage.setItem("invitationCode", invitationCode);
       window.location.href =
         "https://twitter.com/i/oauth2/authorize?client_id=V19YdlA5VnBybXNTVHlCQXdYRFQ6MTpjaQ&code_challenge=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3D&code_challenge_method=plain&redirect_uri=https%3A%2F%2Fnovaro-web-demo.vercel.app%2Fauth%2Fx%2Fcallback&response_type=code&scope=tweet.read%2Busers.read%2Bfollows.read%2Boffline.access&state=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3DF";
     } catch (error: any) {
+      localStorage.removeItem("invitationCode");
       message.warning(
         error?.response?.data?.error || "Invalid invitation code"
       );

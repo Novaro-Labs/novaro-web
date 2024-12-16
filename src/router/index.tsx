@@ -11,6 +11,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import NotFound from "@/components/NotFound";
 import CryptosPage from "@/pages/cryptos-page";
 import { ReactNode } from "react";
+import CommunityDetailPage from "@/pages/community-detail-page";
 
 const PrivateRoute: React.FC<{ element: ReactNode }> = ({ element }) => {
   // const { isConnected } = useAccount();
@@ -68,6 +69,10 @@ const routes = [
       {
         path: "cryptos",
         element: <PrivateRoute element={<CryptosPage />} />,
+      },
+      {
+        path: "community-detail/:communityName",
+        element: <PrivateRoute element={<CommunityDetailPage />} />,
       },
     ],
   },

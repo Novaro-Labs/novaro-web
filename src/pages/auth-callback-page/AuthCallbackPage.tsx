@@ -5,6 +5,7 @@ import { Button, Modal } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./index.less";
+import { authCallback } from "@/api/auth-apis";
 
 
 const AuthCallbackPage = () => {
@@ -19,31 +20,31 @@ const AuthCallbackPage = () => {
     setOpen(false);
   };
 
+  const getXAvatar = async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const state = urlParams.get("state")||'';
+    const invitationCode = localStorage.getItem("invitationCode") || "";
+
+    const user  = await authCallback({
+      invitationCode,
+      state
+    });
+
+    console.log(user);
+  }
+
   /**
    * url:
-   * /auth/x/callback?state=Ky5XeUViuf0bgtRYVoXtqFf4ZmvMbK9voEO9gvqski0%3D&code=RHFMd0RsenlEUEU2WFhoRUxDZXkwcDFCVVlUV1RsWi1TVWI4T3oyeUdWVjhVOjE3MzA3ODk4MjcyMTM6MTowOmFjOjE
+   * https://novaro-web-demo.vercel.app/auth/x/callback?state=KqDKE9_qPWFyg5JzZePpp2Aq1jRAtK0swjGTBMFRH6Q%3DF&code=M0JvRUNiRWJNdDV1dXNSaUZYY01UenNaUC1jdFBiUTlpenBfbTVmdUNxbEhhOjE3MzQyMzUxMjkwMTA6MTowOmFjOjE
    */
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
     const state = urlParams.get("state");
-    // axios.post(
-    //   "https://api.x.com/2/oauth2/token",
-    //   {
-    //     code,
-    //     grant_type: "authorization_code",
-    //     client_id: "client_id",
-    //     code_verifier: "challenge",
-    //     redirect_uri: `${publicUrl}/home`,
-    //   },
-    //   {
-    //     headers: {
-    //       "Content-Type": "application/x-www-form-urlencoded",
-    //     },
-    //   }
-    // );
+
     if (code && state) {
+      getXAvatar()
       setOpen(true);
       localStorage.setItem("x_auth_code", code);
       localStorage.setItem("x_auth_time", String(Date.now()));

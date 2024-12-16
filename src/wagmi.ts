@@ -9,6 +9,8 @@ import {
   optimism,
   polygon,
   sepolia,
+  bsc,
+  bscTestnet
 } from "wagmi/chains";
 
 export const config = getDefaultConfig({
@@ -16,6 +18,8 @@ export const config = getDefaultConfig({
   projectId: "navaro-web",
   chains: [
     mainnet,
+    bsc,
+    bscTestnet,
     linea,
     lineaSepolia,
     sepolia,
